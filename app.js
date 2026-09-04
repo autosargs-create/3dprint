@@ -706,13 +706,13 @@ Piegādes veids: ${state.delivery}
     }
 
     DOM.submitOrderBtn.disabled = true;
-    DOM.submitOrderBtn.innerHTML = `<span>Sūta pasūtījumu...</span>`;
+    DOM.submitOrderBtn.innerHTML = `<span class="spinner-inline"></span><span>Sūta pasūtījumu...</span>`;
 
     const orderId = `#3D-${Math.floor(1000 + Math.random() * 9000)}`;
     const totalPrice = DOM.modalTotalPrice.textContent;
     const timestamp = new Date().toLocaleString("lv-LV");
 
-    // Structured order payload for FormSubmit
+    // Structured order payload
     const orderData = {
       _subject: `[3D Pasūtījums ${orderId}] ${clientName} (${totalPrice})`,
       _replyto: clientEmail,
@@ -742,33 +742,80 @@ Piegādes veids: ${state.delivery}
       "Vietne": "3dlab.jonyz.org"
     };
 
-    try {
-      const res = await fetch("https://formsubmit.co/ajax/autosargs@gmail.com", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "Accept": "application/json"
-        },
-        body: JSON.stringify(orderData)
-      });
+    // If opened as local file (file://), notify and provide instant mailto
+    if (window.location.protocol === "file:") {
+      showFormWarning("Lokālais režīms (file://): e-pasta servisi pieprasa atvērt lapu caur tīmekļa serveri (piem., https://3dlab.jonyz.org). Tūlīt atvērsies jūsu e-pasta programma pasūtījuma apstiprināšanai.");
+      const mailSubject = encodeURIComponent(`[3D Pasūtījums ${orderId}] ${clientName} (${totalPrice})`);
+      const mailBody = encodeURIComponent(`Sveiki!\n\nNosūtu 3D drukas pasūtījumu:\n\nPasūtījuma ID: ${orderId}\nKlients: ${clientName}\nTālrunis: ${clientPhone}\nE-pasts: ${clientEmail}\nPiegāde: ${state.delivery} (${clientAddress})\n\nModelis: ${state.fileName}\nIzmēri: ${orderData["Izmēri (X × Y × Z)"]}\nSvars: ${orderData["Detaļas svars"]}\nMateriāls: ${orderData["Materiāls"]}\nPildījums: ${orderData["Pildījums (Infill)"]}\nSlāņa biezums: ${orderData["Slāņa biezums"]}\nSkaits: ${orderData["Detaļu skaits"]}\nKopējā summa: ${totalPrice}\n\nKomentāri:\n${clientNotes || "Nav"}\n\n---\nNosūtīts no 3dlab.jonyz.org`);
+      window.open(`mailto:autosargs@gmail.com?subject=${mailSubject}&body=${mailBody}`, "_blank");
+      DOM.submitOrderBtn.disabled = false;
+      DOM.submitOrderBtn.innerHTML = `
+        <span>Nosūtīt pasūtījumu</span>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+      `;
+      return;
+    }
 
-      const result = await res.json();
+    try {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 12000);
+
+      // Try first-party Cloudflare Pages function first, fallback to direct FormSubmit
+      let res;
+      try {
+        res = await fetch("/api/order", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+          },
+          body: JSON.stringify(orderData),
+          signal: controller.signal
+        });
+        if (!res.ok && res.status === 404) {
+          throw new Error("404 fallback");
+        }
+      } catch (firstPartyErr) {
+        if (firstPartyErr.name === "AbortError") throw firstPartyErr;
+        // Fallback to direct FormSubmit endpoint
+        res = await fetch("https://formsubmit.co/ajax/autosargs@gmail.com", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+          },
+          body: JSON.stringify(orderData),
+          signal: controller.signal
+        });
+      }
+
+      clearTimeout(timeoutId);
+
+      const responseText = await res.text();
+      let result;
+      try {
+        result = JSON.parse(responseText);
+      } catch {
+        result = { success: res.ok, message: responseText };
+      }
 
       if (result.success === "true" || result.success === true) {
-        // Order successfully sent and delivered to email!
+        // Order successfully sent and delivered!
         DOM.orderModal.classList.add("hidden");
         DOM.successOrderId.textContent = orderId;
         DOM.successModal.classList.remove("hidden");
         form.reset();
       } else if (result.message && result.message.toLowerCase().includes("activation")) {
-        // FormSubmit requires one-time confirmation click in inbox
-        showFormWarning("Forma gaida vienreizēju apstiprinājumu! Lūdzu atveriet e-pastu autosargs@gmail.com un uzspiediet 'Activate Form'. Pēc tam nospiediet 'Nosūtīt pasūtījumu' vēlreiz.");
+        showFormWarning("Forma gaida vienreizēju apstiprinājumu! Lūdzu atveriet autosargs@gmail.com un uzspiediet 'Activate Form'. Pēc tam spiediet 'Nosūtīt pasūtījumu' vēlreiz.");
       } else {
         throw new Error(result.message || "Neizdevās nosūtīt e-pastu");
       }
     } catch (err) {
       console.error("Order submission failed:", err);
-      showFormError(`Radās kļūda: ${err.message || "Pārbaudiet savienojumu"}. Var nosūtīt arī manuāli uz autosargs@gmail.com`);
+      const isTimeout = err.name === "AbortError";
+      showFormError(isTimeout 
+        ? "Savienojuma noildze (serveris neatbildēja 12s laikā). Lūdzu pārbaudiet interneta pieslēgumu vai rakstiet uz autosargs@gmail.com" 
+        : `Radās kļūda: ${err.message || "Neizdevās nosūtīt"}. Lūdzu rakstiet uz autosargs@gmail.com`);
     } finally {
       DOM.submitOrderBtn.disabled = false;
       DOM.submitOrderBtn.innerHTML = `
