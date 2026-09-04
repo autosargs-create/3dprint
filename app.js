@@ -708,55 +708,56 @@ Piegādes veids: ${state.delivery}
     DOM.submitOrderBtn.disabled = true;
     DOM.submitOrderBtn.innerHTML = `<span class="spinner-inline"></span><span>Sūta pasūtījumu...</span>`;
 
-    const orderId = `#3D-${Math.floor(1000 + Math.random() * 9000)}`;
-    const totalPrice = DOM.modalTotalPrice.textContent;
-    const timestamp = new Date().toLocaleString("lv-LV");
-
-    // Structured order payload
-    const orderData = {
-      _subject: `[3D Pasūtījums ${orderId}] ${clientName} (${totalPrice})`,
-      _replyto: clientEmail,
-      _template: "table",
-      _captcha: "false",
-      "Pasūtījuma ID": orderId,
-      "Klients": clientName,
-      "Tālrunis": clientPhone,
-      "E-pasts": clientEmail,
-      "Piegādes veids": state.delivery,
-      "Piegādes adrese": clientAddress,
-      "3D Modelis": state.fileName,
-      "Izmēri (X × Y × Z)": `${state.dimensions.x} × ${state.dimensions.y} × ${state.dimensions.z} mm`,
-      "Detaļas svars": `${state.priceCalculated.estimatedWeightGrams} g`,
-      "Tīrais tilpums": `${state.rawVolumeCm3.toFixed(1)} cm³`,
-      "Materiāls": `${state.material} (${state.colorName})`,
-      "Pildījums (Infill)": `${state.infillPercent}%`,
-      "Slāņa biezums": `${state.layerHeight} mm`,
-      "Detaļu skaits": `${state.quantity} gab.`,
-      "Materiāla izmaksas": DOM.modalMaterialCost.textContent,
-      "Drukas laiks": DOM.modalPrintCost.textContent,
-      "Sagatavošana": DOM.modalPrepCost.textContent,
-      "Piegādes maksa": DOM.modalDeliveryCost.textContent,
-      "KOPĒJĀ SUMMA": totalPrice,
-      "Klienta piezīmes": clientNotes || "Nav norādīti",
-      "Pasūtījuma laiks": timestamp,
-      "Vietne": "3dlab.jonyz.org"
-    };
-
-    // If opened as local file (file://), notify and provide instant mailto
-    if (window.location.protocol === "file:") {
-      showFormWarning("Lokālais režīms (file://): e-pasta servisi pieprasa atvērt lapu caur tīmekļa serveri (piem., https://3dlab.jonyz.org). Tūlīt atvērsies jūsu e-pasta programma pasūtījuma apstiprināšanai.");
-      const mailSubject = encodeURIComponent(`[3D Pasūtījums ${orderId}] ${clientName} (${totalPrice})`);
-      const mailBody = encodeURIComponent(`Sveiki!\n\nNosūtu 3D drukas pasūtījumu:\n\nPasūtījuma ID: ${orderId}\nKlients: ${clientName}\nTālrunis: ${clientPhone}\nE-pasts: ${clientEmail}\nPiegāde: ${state.delivery} (${clientAddress})\n\nModelis: ${state.fileName}\nIzmēri: ${orderData["Izmēri (X × Y × Z)"]}\nSvars: ${orderData["Detaļas svars"]}\nMateriāls: ${orderData["Materiāls"]}\nPildījums: ${orderData["Pildījums (Infill)"]}\nSlāņa biezums: ${orderData["Slāņa biezums"]}\nSkaits: ${orderData["Detaļu skaits"]}\nKopējā summa: ${totalPrice}\n\nKomentāri:\n${clientNotes || "Nav"}\n\n---\nNosūtīts no 3dlab.jonyz.org`);
-      window.open(`mailto:autosargs@gmail.com?subject=${mailSubject}&body=${mailBody}`, "_blank");
-      DOM.submitOrderBtn.disabled = false;
-      DOM.submitOrderBtn.innerHTML = `
-        <span>Nosūtīt pasūtījumu</span>
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
-      `;
-      return;
-    }
-
     try {
+      const orderId = `#3D-${Math.floor(1000 + Math.random() * 9000)}`;
+      const totalPrice = DOM.modalTotalPrice ? DOM.modalTotalPrice.textContent : "0.00 €";
+      const timestamp = new Date().toLocaleString("lv-LV");
+
+      const priceInfo = state.priceCalculated || {};
+      const matCost = (priceInfo.materialCost || 0).toFixed(2);
+      const printCost = (priceInfo.printCost || 0).toFixed(2);
+      const setupCost = (priceInfo.setupCost || 1.50).toFixed(2);
+      const weightGrams = priceInfo.estimatedWeightGrams || (state.rawVolumeCm3 * 1.25 * (state.infillPercent / 100)).toFixed(1);
+
+      // Structured order payload
+      const orderData = {
+        _subject: `[3D Pasūtījums ${orderId}] ${clientName} (${totalPrice})`,
+        _replyto: clientEmail,
+        _template: "table",
+        _captcha: "false",
+        "Pasūtījuma ID": orderId,
+        "Klients": clientName,
+        "Tālrunis": clientPhone,
+        "E-pasts": clientEmail,
+        "Piegādes veids": state.delivery,
+        "Piegādes adrese": clientAddress,
+        "3D Modelis": state.fileName,
+        "Izmēri (X × Y × Z)": `${state.dimensions.x} × ${state.dimensions.y} × ${state.dimensions.z} mm`,
+        "Detaļas svars": `${weightGrams} g`,
+        "Tīrais tilpums": `${state.rawVolumeCm3.toFixed(1)} cm³`,
+        "Materiāls": `${state.material} (${state.colorName})`,
+        "Pildījums (Infill)": `${state.infillPercent}%`,
+        "Slāņa biezums": `${state.layerHeight} mm`,
+        "Detaļu skaits": `${state.quantity} gab.`,
+        "Materiāla izmaksas": `${matCost} €`,
+        "Drukas laiks": `~${priceInfo.printTimeHours || 1} h (${printCost} €)`,
+        "Sagatavošana": `${setupCost} €`,
+        "Piegāde": state.delivery,
+        "KOPĒJĀ SUMMA": totalPrice,
+        "Klienta piezīmes": clientNotes || "Nav norādīti",
+        "Pasūtījuma laiks": timestamp,
+        "Vietne": "https://3dlab.jonyz.org"
+      };
+
+      // If opened as local file (file://), notify and provide instant mailto
+      if (window.location.protocol === "file:") {
+        showFormWarning("Lokālais režīms (file://): e-pasta servisi pieprasa atvērt lapu caur tīmekļa serveri (piem., https://3dlab.jonyz.org). Tūlīt atvērsies jūsu e-pasta programma pasūtījuma apstiprināšanai.");
+        const mailSubject = encodeURIComponent(`[3D Pasūtījums ${orderId}] ${clientName} (${totalPrice})`);
+        const mailBody = encodeURIComponent(`Sveiki!\n\nNosūtu 3D drukas pasūtījumu:\n\nPasūtījuma ID: ${orderId}\nKlients: ${clientName}\nTālrunis: ${clientPhone}\nE-pasts: ${clientEmail}\nPiegāde: ${state.delivery} (${clientAddress})\n\nModelis: ${state.fileName}\nIzmēri: ${orderData["Izmēri (X × Y × Z)"]}\nSvars: ${orderData["Detaļas svars"]}\nMateriāls: ${orderData["Materiāls"]}\nPildījums: ${orderData["Pildījums (Infill)"]}\nSlāņa biezums: ${orderData["Slāņa biezums"]}\nSkaits: ${orderData["Detaļu skaits"]}\nKopējā summa: ${totalPrice}\n\nKomentāri:\n${clientNotes || "Nav"}\n\n---\nNosūtīts no 3dlab.jonyz.org`);
+        window.open(`mailto:autosargs@gmail.com?subject=${mailSubject}&body=${mailBody}`, "_blank");
+        return;
+      }
+
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 20000);
 
