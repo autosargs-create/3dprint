@@ -691,6 +691,7 @@ Piegādes veids: ${state.delivery}
 
   async function handleOrderSubmit(e) {
     e.preventDefault();
+    hideFormStatus();
 
     const form = DOM.orderSubmitForm;
     const clientName = form.elements["name"].value.trim();
@@ -705,74 +706,69 @@ Piegādes veids: ${state.delivery}
     }
 
     DOM.submitOrderBtn.disabled = true;
-    DOM.submitOrderBtn.innerHTML = `<span>Sūta datus...</span>`;
+    DOM.submitOrderBtn.innerHTML = `<span>Sūta pasūtījumu...</span>`;
 
     const orderId = `#3D-${Math.floor(1000 + Math.random() * 9000)}`;
+    const totalPrice = DOM.modalTotalPrice.textContent;
+    const timestamp = new Date().toLocaleString("lv-LV");
 
-    const payload = {
-      order_id: orderId,
-      recipient: "autosargs@gmail.com",
-      client_name: clientName,
-      client_phone: clientPhone,
-      client_email: clientEmail,
-      delivery_type: state.delivery,
-      delivery_address: clientAddress,
-      notes: clientNotes,
-      model_name: state.fileName,
-      dimensions: `${state.dimensions.x} × ${state.dimensions.y} × ${state.dimensions.z} mm`,
-      volume: `${state.rawVolumeCm3.toFixed(1)} cm³`,
-      weight: `${state.priceCalculated.estimatedWeightGrams} g`,
-      material: state.material,
-      color: state.colorName,
-      infill: `${state.infillPercent}%`,
-      layer_height: `${state.layerHeight} mm`,
-      quantity: state.quantity,
-      total_price: DOM.modalTotalPrice.textContent,
-      timestamp: new Date().toLocaleString("lv-LV")
+    // Structured order payload for FormSubmit
+    const orderData = {
+      _subject: `[3D Pasūtījums ${orderId}] ${clientName} (${totalPrice})`,
+      _replyto: clientEmail,
+      _template: "table",
+      _captcha: "false",
+      "Pasūtījuma ID": orderId,
+      "Klients": clientName,
+      "Tālrunis": clientPhone,
+      "E-pasts": clientEmail,
+      "Piegādes veids": state.delivery,
+      "Piegādes adrese": clientAddress,
+      "3D Modelis": state.fileName,
+      "Izmēri (X × Y × Z)": `${state.dimensions.x} × ${state.dimensions.y} × ${state.dimensions.z} mm`,
+      "Detaļas svars": `${state.priceCalculated.estimatedWeightGrams} g`,
+      "Tīrais tilpums": `${state.rawVolumeCm3.toFixed(1)} cm³`,
+      "Materiāls": `${state.material} (${state.colorName})`,
+      "Pildījums (Infill)": `${state.infillPercent}%`,
+      "Slāņa biezums": `${state.layerHeight} mm`,
+      "Detaļu skaits": `${state.quantity} gab.`,
+      "Materiāla izmaksas": DOM.modalMaterialCost.textContent,
+      "Drukas laiks": DOM.modalPrintCost.textContent,
+      "Sagatavošana": DOM.modalPrepCost.textContent,
+      "Piegādes maksa": DOM.modalDeliveryCost.textContent,
+      "KOPĒJĀ SUMMA": totalPrice,
+      "Klienta piezīmes": clientNotes || "Nav norādīti",
+      "Pasūtījuma laiks": timestamp,
+      "Vietne": "3dlab.jonyz.org"
     };
 
     try {
-      // Direct Web3Forms submission (Free, reliable, zero backend needed)
-      const formData = new FormData();
-      formData.append("access_key", "c06efad5-3dprint-jonyz-lab");
-      formData.append("subject", `[3D Pasūtījums ${orderId}] No: ${clientName} (${payload.total_price})`);
-      formData.append("from_name", "3dlab.jonyz.org");
-      formData.append("to_email", "autosargs@gmail.com");
-      formData.append("message", JSON.stringify(payload, null, 2));
+      const res = await fetch("https://formsubmit.co/ajax/autosargs@gmail.com", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json"
+        },
+        body: JSON.stringify(orderData)
+      });
 
-      let sentSuccessfully = false;
+      const result = await res.json();
 
-      try {
-        const res = await fetch("https://api.web3forms.com/submit", {
-          method: "POST",
-          body: formData
-        });
-        const result = await res.json();
-        if (result.success) {
-          sentSuccessfully = true;
-        }
-      } catch (networkErr) {
-        console.warn("Direct API fetch fallback to mailto intent:", networkErr);
+      if (result.success === "true" || result.success === true) {
+        // Order successfully sent and delivered to email!
+        DOM.orderModal.classList.add("hidden");
+        DOM.successOrderId.textContent = orderId;
+        DOM.successModal.classList.remove("hidden");
+        form.reset();
+      } else if (result.message && result.message.toLowerCase().includes("activation")) {
+        // FormSubmit requires one-time confirmation click in inbox
+        showFormWarning("Forma gaida vienreizēju apstiprinājumu! Lūdzu atveriet e-pastu autosargs@gmail.com un uzspiediet 'Activate Form'. Pēc tam nospiediet 'Nosūtīt pasūtījumu' vēlreiz.");
+      } else {
+        throw new Error(result.message || "Neizdevās nosūtīt e-pastu");
       }
-
-      // If direct form fails or in offline dev, open mailto intent
-      if (!sentSuccessfully) {
-        const mailSubject = encodeURIComponent(`Jauns 3D Pasūtījums ${orderId} - ${clientName}`);
-        const mailBody = encodeURIComponent(`Sveiki!\n\nNosūtu 3D drukas pasūtījumu:\n\nPasūtījuma ID: ${orderId}\nKlients: ${clientName}\nTālrunis: ${clientPhone}\nE-pasts: ${clientEmail}\nPiegāde: ${state.delivery} (${clientAddress})\n\nModelis: ${state.fileName}\nIzmēri: ${payload.dimensions}\nSvars: ${payload.weight}\nMateriāls: ${state.material} (${state.colorName})\nPildījums: ${state.infill}\nSlānis: ${state.layer_height}\nSkaits: ${state.quantity} gab.\nKopējā summa: ${payload.total_price}\n\nKomentāri:\n${clientNotes || "Nav"}\n\n---\nNosūtīts no 3dlab.jonyz.org`);
-        
-        window.open(`mailto:autosargs@gmail.com?subject=${mailSubject}&body=${mailBody}`, "_blank");
-      }
-
-      // Success modal
-      DOM.orderModal.classList.add("hidden");
-      DOM.successOrderId.textContent = orderId;
-      DOM.successModal.classList.remove("hidden");
-
-      form.reset();
-
     } catch (err) {
-      console.error("Submission failed:", err);
-      showFormError("Radās kļūda nosūtot pasūtījumu. Lūdzu rakstiet tieši uz autosargs@gmail.com.");
+      console.error("Order submission failed:", err);
+      showFormError(`Radās kļūda: ${err.message || "Pārbaudiet savienojumu"}. Var nosūtīt arī manuāli uz autosargs@gmail.com`);
     } finally {
       DOM.submitOrderBtn.disabled = false;
       DOM.submitOrderBtn.innerHTML = `
@@ -786,6 +782,17 @@ Piegādes veids: ${state.delivery}
     DOM.formStatusMsg.textContent = msg;
     DOM.formStatusMsg.className = "form-status-msg error";
     DOM.formStatusMsg.classList.remove("hidden");
+  }
+
+  function showFormWarning(msg) {
+    DOM.formStatusMsg.textContent = msg;
+    DOM.formStatusMsg.className = "form-status-msg warning";
+    DOM.formStatusMsg.classList.remove("hidden");
+  }
+
+  function hideFormStatus() {
+    DOM.formStatusMsg.classList.add("hidden");
+    DOM.formStatusMsg.textContent = "";
   }
 
   // --- INITIALIZE ON DOM READY ---

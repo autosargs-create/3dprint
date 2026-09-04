@@ -1595,6 +1595,13 @@ details[open] .faq-question::after {
   color: #ff99b3;
 }
 
+.form-status-msg.warning {
+  background: rgba(255, 170, 0, 0.15);
+  border: 1px solid rgba(255, 170, 0, 0.4);
+  color: #ffd166;
+  line-height: 1.5;
+}
+
 .success-icon-wrap {
   width: 72px;
   height: 72px;
