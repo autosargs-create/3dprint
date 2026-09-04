@@ -321,6 +321,17 @@
     DOM.viewerContainer.classList.remove("hidden");
     DOM.loadedFileName.textContent = `Ielādē: ${modelName}...`;
 
+    state.fileName = modelName;
+    state.isPreset = true;
+
+    // Cache as File blob so it gets attached to the order email
+    fetch(modelPath)
+      .then(res => res.blob())
+      .then(blob => {
+        state.file = new File([blob], modelName, { type: "model/stl" });
+      })
+      .catch(e => console.warn("Could not cache preset blob:", e));
+
     const loader = new THREE.STLLoader();
     loader.load(
       modelPath,
@@ -719,55 +730,63 @@ Piegādes veids: ${state.delivery}
       const setupCost = (priceInfo.setupCost || 1.50).toFixed(2);
       const weightGrams = priceInfo.estimatedWeightGrams || (state.rawVolumeCm3 * 1.25 * (state.infillPercent / 100)).toFixed(1);
 
-      // Structured order payload
-      const orderData = {
-        _subject: `[3D Pasūtījums ${orderId}] ${clientName} (${totalPrice})`,
-        _replyto: clientEmail,
-        _template: "table",
-        _captcha: "false",
-        "Pasūtījuma ID": orderId,
-        "Klients": clientName,
-        "Tālrunis": clientPhone,
-        "E-pasts": clientEmail,
-        "Piegādes veids": state.delivery,
-        "Piegādes adrese": clientAddress,
-        "3D Modelis": state.fileName,
-        "Izmēri (X × Y × Z)": `${state.dimensions.x} × ${state.dimensions.y} × ${state.dimensions.z} mm`,
-        "Detaļas svars": `${weightGrams} g`,
-        "Tīrais tilpums": `${state.rawVolumeCm3.toFixed(1)} cm³`,
-        "Materiāls": `${state.material} (${state.colorName})`,
-        "Pildījums (Infill)": `${state.infillPercent}%`,
-        "Slāņa biezums": `${state.layerHeight} mm`,
-        "Detaļu skaits": `${state.quantity} gab.`,
-        "Materiāla izmaksas": `${matCost} €`,
-        "Drukas laiks": `~${priceInfo.printTimeHours || 1} h (${printCost} €)`,
-        "Sagatavošana": `${setupCost} €`,
-        "Piegāde": state.delivery,
-        "KOPĒJĀ SUMMA": totalPrice,
-        "Klienta piezīmes": clientNotes || "Nav norādīti",
-        "Pasūtījuma laiks": timestamp,
-        "Vietne": "https://3dlab.jonyz.org"
-      };
+      // Structured order payload via FormData to allow file attachments
+      const formData = new FormData();
+      formData.append("_subject", `[3D Pasūtījums ${orderId}] ${clientName} (${totalPrice})`);
+      formData.append("_replyto", clientEmail);
+      formData.append("_template", "table");
+      formData.append("_captcha", "false");
+
+      formData.append("Pasūtījuma ID", orderId);
+      formData.append("Klients", clientName);
+      formData.append("Tālrunis", clientPhone);
+      formData.append("E-pasts", clientEmail);
+      formData.append("Piegādes veids", state.delivery);
+      formData.append("Piegādes adrese", clientAddress);
+      formData.append("3D Modelis", state.fileName);
+      formData.append("Izmēri (X × Y × Z)", `${state.dimensions.x} × ${state.dimensions.y} × ${state.dimensions.z} mm`);
+      formData.append("Detaļas svars", `${weightGrams} g`);
+      formData.append("Tīrais tilpums", `${state.rawVolumeCm3.toFixed(1)} cm³`);
+      formData.append("Materiāls", `${state.material} (${state.colorName})`);
+      formData.append("Pildījums (Infill)", `${state.infillPercent}%`);
+      formData.append("Slāņa biezums", `${state.layerHeight} mm`);
+      formData.append("Detaļu skaits", `${state.quantity} gab.`);
+      formData.append("Materiāla izmaksas", `${matCost} €`);
+      formData.append("Drukas laiks", `~${priceInfo.printTimeHours || 1} h (${printCost} €)`);
+      formData.append("Sagatavošana", `${setupCost} €`);
+      formData.append("Piegāde", state.delivery);
+      formData.append("KOPĒJĀ SUMMA", totalPrice);
+      formData.append("Klienta piezīmes", clientNotes || "Nav norādīti");
+      formData.append("Pasūtījuma laiks", timestamp);
+      formData.append("Vietne", "https://3dlab.jonyz.org");
+
+      // Attach the actual STL file directly to the email
+      if (state.file) {
+        if (state.file.size <= 9.5 * 1024 * 1024) {
+          formData.append("attachment", state.file, state.fileName);
+        } else {
+          formData.append("Pielikuma statuss", `Fails pārsniedz 10 MB limitu (${(state.file.size / (1024 * 1024)).toFixed(1)} MB). Lūgums pieprasīt klientam atsevišķi.`);
+        }
+      }
 
       // If opened as local file (file://), notify and provide instant mailto
       if (window.location.protocol === "file:") {
         showFormWarning("Lokālais režīms (file://): e-pasta servisi pieprasa atvērt lapu caur tīmekļa serveri (piem., https://3dlab.jonyz.org). Tūlīt atvērsies jūsu e-pasta programma pasūtījuma apstiprināšanai.");
         const mailSubject = encodeURIComponent(`[3D Pasūtījums ${orderId}] ${clientName} (${totalPrice})`);
-        const mailBody = encodeURIComponent(`Sveiki!\n\nNosūtu 3D drukas pasūtījumu:\n\nPasūtījuma ID: ${orderId}\nKlients: ${clientName}\nTālrunis: ${clientPhone}\nE-pasts: ${clientEmail}\nPiegāde: ${state.delivery} (${clientAddress})\n\nModelis: ${state.fileName}\nIzmēri: ${orderData["Izmēri (X × Y × Z)"]}\nSvars: ${orderData["Detaļas svars"]}\nMateriāls: ${orderData["Materiāls"]}\nPildījums: ${orderData["Pildījums (Infill)"]}\nSlāņa biezums: ${orderData["Slāņa biezums"]}\nSkaits: ${orderData["Detaļu skaits"]}\nKopējā summa: ${totalPrice}\n\nKomentāri:\n${clientNotes || "Nav"}\n\n---\nNosūtīts no 3dlab.jonyz.org`);
+        const mailBody = encodeURIComponent(`Sveiki!\n\nNosūtu 3D drukas pasūtījumu:\n\nPasūtījuma ID: ${orderId}\nKlients: ${clientName}\nTālrunis: ${clientPhone}\nE-pasts: ${clientEmail}\nPiegāde: ${state.delivery} (${clientAddress})\n\nModelis: ${state.fileName}\nIzmēri: ${state.dimensions.x} × ${state.dimensions.y} × ${state.dimensions.z} mm\nSvars: ${weightGrams} g\nMateriāls: ${state.material} (${state.colorName})\nPildījums: ${state.infillPercent}%\nSlāņa biezums: ${state.layerHeight} mm\nSkaits: ${state.quantity} gab.\nKopējā summa: ${totalPrice}\n\nKomentāri:\n${clientNotes || "Nav"}\n\n---\nNosūtīts no 3dlab.jonyz.org`);
         window.open(`mailto:autosargs@gmail.com?subject=${mailSubject}&body=${mailBody}`, "_blank");
         return;
       }
 
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 20000);
+      const timeoutId = setTimeout(() => controller.abort(), 25000);
 
       const res = await fetch("https://formsubmit.co/ajax/autosargs@gmail.com", {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
           "Accept": "application/json"
         },
-        body: JSON.stringify(orderData),
+        body: formData,
         signal: controller.signal
       });
 
