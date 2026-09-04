@@ -3,6 +3,7 @@
    - Three.js 3D Viewport with OrbitControls & STLLoader
    - Real-time Mesh Volume & Dimension Analysis (Signed Tetrahedra)
    - Instant Slicer & Material Cost Calculator
+   - Real STL Model Preset Loader (Benchy, Phone Stand, Hanger, Organizer)
    - Order Checkout & Email Dispatch (autosargs@gmail.com)
    ========================================================================== */
 
@@ -18,18 +19,18 @@
   };
 
   const COLOR_HEX_MAP = {
-    "Melna":   0x1c1e24,
+    "Melna":   0x1e212b,
     "Pelēka":  0x64748b,
-    "Balta":   0xf8fafc,
+    "Balta":   0xf1f5f9,
     "Sarkana": 0xe63946,
     "Oranža":  0xff6b00,
     "Zila":    0x0080ff
   };
 
   const LAYER_TIME_FACTORS = {
-    "0.28": 0.75, // Draft, faster
+    "0.28": 0.75, // Draft, fast
     "0.20": 1.00, // Standard
-    "0.12": 1.55  // Detail, takes longer
+    "0.12": 1.55  // Detailed, slower
   };
 
   const BASE_SETUP_FEE = 2.50; // EUR
@@ -48,7 +49,7 @@
     infillPercent: 25,
     layerHeight: "0.20",
     quantity: 1,
-    delivery: "Omniva",
+    delivery: "Omniva (+3.50 €)",
     deliveryCost: 3.50,
     priceCalculated: {
       materialCost: 0,
@@ -125,7 +126,7 @@
 
     // 2. Camera
     camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 2000);
-    camera.position.set(150, 180, 220);
+    camera.position.set(130, 160, 180);
 
     // 3. WebGL Renderer
     renderer = new THREE.WebGLRenderer({
@@ -142,27 +143,27 @@
     controls = new THREE.OrbitControls(camera, renderer.domElement);
     controls.enableDamping = true;
     controls.dampingFactor = 0.08;
-    controls.maxPolarAngle = Math.PI / 2 - 0.02; // Don't go beneath bed
+    controls.maxPolarAngle = Math.PI / 2 - 0.02; // Don't go under bed
     controls.minDistance = 20;
     controls.maxDistance = 800;
 
     // 5. Studio Lighting
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.65);
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.75);
     scene.add(ambientLight);
 
-    const keyLight = new THREE.DirectionalLight(0xffffff, 0.85);
-    keyLight.position.set(120, 200, 100);
+    const keyLight = new THREE.DirectionalLight(0xffffff, 0.9);
+    keyLight.position.set(120, 220, 120);
     scene.add(keyLight);
 
-    const cyanRimLight = new THREE.DirectionalLight(0x00f0ff, 0.6);
-    cyanRimLight.position.set(-150, 80, -120);
+    const cyanRimLight = new THREE.DirectionalLight(0x00f0ff, 0.65);
+    cyanRimLight.position.set(-140, 90, -130);
     scene.add(cyanRimLight);
 
-    const warmFillLight = new THREE.DirectionalLight(0xffaa44, 0.35);
-    warmFillLight.position.set(100, 50, -100);
+    const warmFillLight = new THREE.DirectionalLight(0xffaa44, 0.4);
+    warmFillLight.position.set(120, 60, -90);
     scene.add(warmFillLight);
 
-    // 6. Print Bed (250x250mm standard Prusa/Bambu style)
+    // 6. Print Bed (250x250mm standard Prusa/Bambu build volume)
     createPrintBed();
 
     // 7. Render Loop
@@ -198,7 +199,7 @@
       -half, 0,  half,  -half, 0, -half
     ]);
     borderGeo.setAttribute("position", new THREE.BufferAttribute(borderPoints, 3));
-    const borderMat = new THREE.LineBasicMaterial({ color: 0x00f0ff, opacity: 0.35, transparent: true });
+    const borderMat = new THREE.LineBasicMaterial({ color: 0x00f0ff, opacity: 0.4, transparent: true });
     const borderLine = new THREE.LineSegments(borderGeo, borderMat);
     printBedGroup.add(borderLine);
 
@@ -217,7 +218,6 @@
   // =========================================================================
   // 2. MESH VOLUME & GEOMETRY CALCULATIONS
   // =========================================================================
-  // Calculates true signed volume of arbitrary triangular manifold mesh in cm³
   function calculateMeshVolume(geometry) {
     let position = geometry.attributes.position;
     let faces = position.count / 3;
@@ -232,7 +232,6 @@
       p2.fromBufferAttribute(position, i * 3 + 1);
       p3.fromBufferAttribute(position, i * 3 + 2);
 
-      // Signed volume of tetrahedron formed with origin
       signedVolumeSum += (
         -p3.x * p2.y * p1.z +
          p2.x * p3.y * p1.z +
@@ -243,7 +242,6 @@
       ) / 6.0;
     }
 
-    // Convert from mm³ to cm³ (1 cm³ = 1000 mm³)
     const volumeCm3 = Math.abs(signedVolumeSum) / 1000.0;
     return volumeCm3 > 0.01 ? volumeCm3 : 1.0;
   }
@@ -271,14 +269,14 @@
     const sizeY = Math.round(Math.abs(bbox.max.y - bbox.min.y) * 10) / 10;
     const sizeZ = Math.round(Math.abs(bbox.max.z - bbox.min.z) * 10) / 10;
 
-    // Center geometry horizontally and stand on print bed (min.y = 0)
+    // Center geometry horizontally and stand on print bed plane (min.y = 0)
     geometry.center();
     geometry.computeBoundingBox();
     const heightOffset = -geometry.boundingBox.min.y;
     geometry.translate(0, heightOffset, 0);
 
-    // Material
-    const targetColor = COLOR_HEX_MAP[state.colorName] || 0x00f0ff;
+    // Material setup
+    const targetColor = COLOR_HEX_MAP[state.colorName] || 0x1e212b;
     const material = new THREE.MeshStandardMaterial({
       color: targetColor,
       roughness: 0.35,
@@ -291,7 +289,7 @@
     currentMesh.receiveShadow = true;
     scene.add(currentMesh);
 
-    // Calculate specs
+    // Volume & specs calculation
     const volumeCm3 = calculateMeshVolume(geometry);
 
     state.fileName = modelName || "model.stl";
@@ -316,6 +314,32 @@
     recalculatePrice();
   }
 
+  // Load Real STL from Server / Static Folder
+  function loadPresetSTL(modelPath, modelName) {
+    initThree();
+    DOM.dropzone.classList.add("hidden");
+    DOM.viewerContainer.classList.remove("hidden");
+    DOM.loadedFileName.textContent = `Ielādē: ${modelName}...`;
+
+    const loader = new THREE.STLLoader();
+    loader.load(
+      modelPath,
+      function(geometry) {
+        displayLoadedGeometry(geometry, modelName);
+      },
+      function(xhr) {
+        if (xhr.lengthComputable) {
+          const percent = Math.round((xhr.loaded / xhr.total) * 100);
+          DOM.loadedFileName.textContent = `Ielādē ${modelName} (${percent}%)...`;
+        }
+      },
+      function(err) {
+        console.error("Failed to load preset STL:", err);
+        alert(`Neizdevās ielādēt modeli: ${modelPath}`);
+      }
+    );
+  }
+
   // =========================================================================
   // 4. PRICE & WEIGHT CALCULATOR
   // =========================================================================
@@ -325,7 +349,6 @@
     const ratePerGram = matInfo.pricePerGram;
 
     // Effective volume based on perimeter shells + infill
-    // ~25% of a standard model is solid perimeters/top/bottom shells
     const infillRatio = state.infillPercent / 100.0;
     const effectiveVolumeFactor = 0.28 + (0.72 * infillRatio);
     const printedVolumeCm3 = state.rawVolumeCm3 * effectiveVolumeFactor;
@@ -337,7 +360,7 @@
     // Layer time multiplier
     const qualityFactor = LAYER_TIME_FACTORS[state.layerHeight] || 1.0;
 
-    // Estimated print time (e.g. approx 15g/hr on standard modern coreXY)
+    // Estimated print time (e.g. approx 16-18g/hr on standard coreXY)
     const hoursPerPiece = Math.max(0.4, (singleWeightGrams / 18.0) * qualityFactor);
     const totalHours = hoursPerPiece * state.quantity;
 
@@ -375,9 +398,9 @@
     DOM.setupCost.textContent = `${BASE_SETUP_FEE.toFixed(2)} €`;
     DOM.totalPriceDisplay.textContent = `${state.priceCalculated.totalPrice.toFixed(2)} €`;
 
-    // Update 3D model color if mesh exists
+    // Update 3D model color & material properties
     if (currentMesh && currentMesh.material) {
-      const colorHex = COLOR_HEX_MAP[state.colorName] || 0x00f0ff;
+      const colorHex = COLOR_HEX_MAP[state.colorName] || 0x1e212b;
       currentMesh.material.color.setHex(colorHex);
       currentMesh.material.roughness = matInfo.roughness;
       currentMesh.material.needsUpdate = true;
@@ -415,12 +438,6 @@
     reader.readAsArrayBuffer(file);
   }
 
-  // Sample Calibration Cube Generator (for 1-click testing)
-  function loadSampleTestCube() {
-    const geo = new THREE.BoxGeometry(30, 30, 30);
-    displayLoadedGeometry(geo, "Testa_Kubs_30mm.stl");
-  }
-
   // =========================================================================
   // 6. EVENT LISTENERS
   // =========================================================================
@@ -455,10 +472,10 @@
       }
     });
 
-    // Sample Model Button
+    // Sample Model Button (Loads official 3DBenchy!)
     DOM.sampleModelBtn.addEventListener("click", (e) => {
       e.stopPropagation();
-      loadSampleTestCube();
+      loadPresetSTL("models/benchy.stl", "3D Benchy Kuģītis.stl");
     });
 
     // Change File
@@ -485,23 +502,31 @@
       }
     });
 
-    // Material Selection
-    document.querySelectorAll("input[name='material\]").forEach(radio => {
-      radio.addEventListener("change", (e) => {
-        document.querySelectorAll(".material-pill").forEach(p => p.classList.remove("selected"));
-        e.target.closest(".material-pill").classList.add("selected");
-        state.material = e.target.value;
-        recalculatePrice();
+    // --- MATERIAL SELECTION (DIRECT PILL CLICK & INPUT CHANGE) ---
+    document.querySelectorAll(".material-pill").forEach(pill => {
+      pill.addEventListener("click", function(e) {
+        const radio = this.querySelector('input[type="radio"]');
+        if (radio) {
+          radio.checked = true;
+          document.querySelectorAll(".material-pill").forEach(p => p.classList.remove("selected"));
+          this.classList.add("selected");
+          state.material = radio.value;
+          recalculatePrice();
+        }
       });
     });
 
-    // Color Selection
-    document.querySelectorAll("input[name='color\]").forEach(radio => {
-      radio.addEventListener("change", (e) => {
-        document.querySelectorAll(".color-dot-wrap").forEach(w => w.classList.remove("selected"));
-        e.target.closest(".color-dot-wrap").classList.add("selected");
-        state.colorName = e.target.value;
-        recalculatePrice();
+    // --- COLOR SELECTION (DIRECT DOT CLICK & INPUT CHANGE) ---
+    document.querySelectorAll(".color-dot-wrap").forEach(wrap => {
+      wrap.addEventListener("click", function(e) {
+        const radio = this.querySelector('input[type="radio"]');
+        if (radio) {
+          radio.checked = true;
+          document.querySelectorAll(".color-dot-wrap").forEach(w => w.classList.remove("selected"));
+          this.classList.add("selected");
+          state.colorName = radio.value;
+          recalculatePrice();
+        }
       });
     });
 
@@ -550,50 +575,49 @@
       recalculatePrice();
     });
 
-    // Presets Catalog Select
+    // --- PRESETS CATALOG SELECTION (REAL STL LOADER) ---
     document.querySelectorAll(".select-preset-btn").forEach(btn => {
       btn.addEventListener("click", () => {
         const name = btn.dataset.name;
-        const x = parseFloat(btn.dataset.x);
-        const y = parseFloat(btn.dataset.y);
-        const z = parseFloat(btn.dataset.z);
-        const vol = parseFloat(btn.dataset.volume);
+        const modelFile = btn.dataset.model;
         const mat = btn.dataset.material || "PETG";
         const infill = parseInt(btn.dataset.infill) || 25;
 
-        // Generate parametric mesh placeholder for preset
-        const geo = new THREE.BoxGeometry(x, z, y); // Three.js Y is up
-        displayLoadedGeometry(geo, `[Printables] ${name}.stl`);
-        state.isPreset = true;
-        state.rawVolumeCm3 = vol;
-
-        // Sync UI with preset values
+        // Set material
         state.material = mat;
-        const matRadio = document.querySelector(`input[name="material"][value="${mat}"]`);
-        if (matRadio) {
-          matRadio.checked = true;
+        const targetPill = document.querySelector(`.material-pill input[value="${mat}"]`);
+        if (targetPill) {
+          targetPill.checked = true;
           document.querySelectorAll(".material-pill").forEach(p => p.classList.remove("selected"));
-          matRadio.closest(".material-pill").classList.add("selected");
+          targetPill.closest(".material-pill").classList.add("selected");
         }
 
+        // Set infill
         state.infillPercent = infill;
         DOM.infillSlider.value = infill;
-        DOM.infillValueDisplay.textContent = `${infill}% — Preset`;
+        DOM.infillValueDisplay.textContent = `${infill}% — Ieteicamais`;
 
-        recalculatePrice();
+        // Load REAL STL MODEL file!
+        if (modelFile) {
+          loadPresetSTL(modelFile, `${name}.stl`);
+        }
 
-        // Smooth scroll to configurator
+        // Smooth scroll to calculator
         document.getElementById("calculator").scrollIntoView({ behavior: "smooth" });
       });
     });
 
     // Delivery Radio Change in Modal
-    document.querySelectorAll("input[name='delivery\]").forEach(radio => {
-      radio.addEventListener("change", (e) => {
-        document.querySelectorAll(".delivery-radio").forEach(r => r.classList.remove("selected"));
-        e.target.closest(".delivery-radio").classList.add("selected");
-        state.delivery = e.target.value;
-        updateModalTotals();
+    document.querySelectorAll(".delivery-radio").forEach(radioWrap => {
+      radioWrap.addEventListener("click", function() {
+        const radio = this.querySelector('input[type="radio"]');
+        if (radio) {
+          radio.checked = true;
+          document.querySelectorAll(".delivery-radio").forEach(r => r.classList.remove("selected"));
+          this.classList.add("selected");
+          state.delivery = radio.value;
+          updateModalTotals();
+        }
       });
     });
 
@@ -706,15 +730,14 @@ Piegādes veids: ${state.delivery}
     };
 
     try {
-      // Direct Web3Forms submission (Free, reliable, no backend required)
+      // Direct Web3Forms submission (Free, reliable, zero backend needed)
       const formData = new FormData();
-      formData.append("access_key", "c06efad5-3dprint-jonyz-lab"); // Generic fallback or API key
+      formData.append("access_key", "c06efad5-3dprint-jonyz-lab");
       formData.append("subject", `[3D Pasūtījums ${orderId}] No: ${clientName} (${payload.total_price})`);
       formData.append("from_name", "3dprint.jonyz.org");
       formData.append("to_email", "autosargs@gmail.com");
       formData.append("message", JSON.stringify(payload, null, 2));
 
-      // Attempt fetch to form endpoint with mailto fallback
       let sentSuccessfully = false;
 
       try {
@@ -730,12 +753,11 @@ Piegādes veids: ${state.delivery}
         console.warn("Direct API fetch fallback to mailto intent:", networkErr);
       }
 
-      // If direct form fails or in local dev, provide seamless mailto trigger
+      // If direct form fails or in offline dev, open mailto intent
       if (!sentSuccessfully) {
         const mailSubject = encodeURIComponent(`Jauns 3D Pasūtījums ${orderId} - ${clientName}`);
         const mailBody = encodeURIComponent(`Sveiki!\n\nNosūtu 3D drukas pasūtījumu:\n\nPasūtījuma ID: ${orderId}\nKlients: ${clientName}\nTālrunis: ${clientPhone}\nE-pasts: ${clientEmail}\nPiegāde: ${state.delivery} (${clientAddress})\n\nModelis: ${state.fileName}\nIzmēri: ${payload.dimensions}\nSvars: ${payload.weight}\nMateriāls: ${state.material} (${state.colorName})\nPildījums: ${state.infill}\nSlānis: ${state.layer_height}\nSkaits: ${state.quantity} gab.\nKopējā summa: ${payload.total_price}\n\nKomentāri:\n${clientNotes || "Nav"}\n\n---\nNosūtīts no 3dprint.jonyz.org`);
         
-        // Open background mailto link so email client is ready
         window.open(`mailto:autosargs@gmail.com?subject=${mailSubject}&body=${mailBody}`, "_blank");
       }
 
@@ -744,7 +766,6 @@ Piegādes veids: ${state.delivery}
       DOM.successOrderId.textContent = orderId;
       DOM.successModal.classList.remove("hidden");
 
-      // Reset form
       form.reset();
 
     } catch (err) {
@@ -765,7 +786,7 @@ Piegādes veids: ${state.delivery}
     DOM.formStatusMsg.classList.remove("hidden");
   }
 
-  // --- INITIALIZE APPLICATION ON DOM READY ---
+  // --- INITIALIZE ON DOM READY ---
   document.addEventListener("DOMContentLoaded", () => {
     initEvents();
     recalculatePrice();

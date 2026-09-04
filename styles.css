@@ -1427,3 +1427,23 @@ details[open] .faq-question::after {
     width: 100%;
   }
 }
+
+.preset-svg-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: radial-gradient(circle at center, #131826 0%, #090b10 100%);
+  border-bottom: 1px solid var(--border-glass);
+}
+
+.preset-vector {
+  width: 82%;
+  height: 82%;
+  filter: drop-shadow(0 0 12px rgba(0, 240, 255, 0.15));
+  transition: transform 0.35s ease, filter 0.35s ease;
+}
+
+.preset-card:hover .preset-vector {
+  transform: scale(1.06);
+  filter: drop-shadow(0 0 20px rgba(0, 240, 255, 0.35));
+}
