@@ -720,6 +720,63 @@ Piegādes veids: ${state.delivery}
     DOM.orderModal.classList.add("hidden");
   }
 
+  function setHiddenField(form, name, value) {
+    let input = form.querySelector(`input[name="${CSS.escape(name)}"]`);
+    if (!input) {
+      input = document.createElement("input");
+      input.type = "hidden";
+      input.name = name;
+      form.appendChild(input);
+    }
+    input.value = value;
+  }
+
+  function prepareFormAttachment() {
+    const userFileInput = DOM.fileInput;
+    const attachmentInput = document.getElementById("formAttachmentInput");
+
+    // If user selected file via browse input and attachmentInput is empty, populate it
+    if (userFileInput && userFileInput.files && userFileInput.files.length > 0) {
+      if (!attachmentInput.files || attachmentInput.files.length === 0) {
+        setFormAttachment(userFileInput.files[0]);
+      }
+      if (!attachmentInput.files || attachmentInput.files.length === 0) {
+        userFileInput.setAttribute("name", "attachment");
+        userFileInput.setAttribute("form", "orderSubmitForm");
+        attachmentInput.removeAttribute("name");
+        return;
+      }
+    }
+
+    // Ensure attachmentInput has name="attachment" and fileInput doesn't conflict
+    if (attachmentInput) {
+      attachmentInput.setAttribute("name", "attachment");
+    }
+    if (userFileInput) {
+      userFileInput.removeAttribute("name");
+      userFileInput.removeAttribute("form");
+    }
+  }
+
+  function checkOrderRedirect() {
+    try {
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.get("order") === "success") {
+        const orderId = urlParams.get("id") || "#3D-Pasūtījums";
+        if (DOM.successOrderId) {
+          DOM.successOrderId.textContent = decodeURIComponent(orderId);
+        }
+        if (DOM.successModal) {
+          DOM.successModal.classList.remove("hidden");
+        }
+        // Clean URL query string without reloading
+        window.history.replaceState({}, document.title, window.location.pathname);
+      }
+    } catch (e) {
+      console.warn("Could not check order redirect:", e);
+    }
+  }
+
   async function handleOrderSubmit(e) {
     e.preventDefault();
     hideFormStatus();
@@ -737,7 +794,7 @@ Piegādes veids: ${state.delivery}
     }
 
     DOM.submitOrderBtn.disabled = true;
-    DOM.submitOrderBtn.innerHTML = `<span class="spinner-inline"></span><span>Sūta pasūtījumu...</span>`;
+    DOM.submitOrderBtn.innerHTML = `<span class="spinner-inline"></span><span>Sūta pasūtījumu un failu...</span>`;
 
     try {
       const orderId = `#3D-${Math.floor(1000 + Math.random() * 9000)}`;
@@ -749,36 +806,6 @@ Piegādes veids: ${state.delivery}
       const printCost = (priceInfo.printCost || 0).toFixed(2);
       const setupCost = (priceInfo.setupCost || 1.50).toFixed(2);
       const weightGrams = priceInfo.estimatedWeightGrams || (state.rawVolumeCm3 * 1.25 * (state.infillPercent / 100)).toFixed(1);
-
-      // Structured order payload via FormData to allow file attachments
-      const formData = new FormData();
-      formData.append("_subject", `[3D Pasūtījums ${orderId}] ${clientName} (${totalPrice})`);
-      formData.append("_replyto", clientEmail);
-      formData.append("_template", "table");
-      formData.append("_captcha", "false");
-
-      formData.append("Pasūtījuma ID", orderId);
-      formData.append("Klients", clientName);
-      formData.append("Tālrunis", clientPhone);
-      formData.append("E-pasts", clientEmail);
-      formData.append("Piegādes veids", state.delivery);
-      formData.append("Piegādes adrese", clientAddress);
-      formData.append("3D Modelis", state.fileName);
-      formData.append("Izmēri (X × Y × Z)", `${state.dimensions.x} × ${state.dimensions.y} × ${state.dimensions.z} mm`);
-      formData.append("Detaļas svars", `${weightGrams} g`);
-      formData.append("Tīrais tilpums", `${state.rawVolumeCm3.toFixed(1)} cm³`);
-      formData.append("Materiāls", `${state.material} (${state.colorName})`);
-      formData.append("Pildījums (Infill)", `${state.infillPercent}%`);
-      formData.append("Slāņa biezums", `${state.layerHeight} mm`);
-      formData.append("Detaļu skaits", `${state.quantity} gab.`);
-      formData.append("Materiāla izmaksas", `${matCost} €`);
-      formData.append("Drukas laiks", `~${priceInfo.printTimeHours || 1} h (${printCost} €)`);
-      formData.append("Sagatavošana", `${setupCost} €`);
-      formData.append("Piegāde", state.delivery);
-      formData.append("KOPĒJĀ SUMMA", totalPrice);
-      formData.append("Klienta piezīmes", clientNotes || "Nav norādīti");
-      formData.append("Pasūtījuma laiks", timestamp);
-      formData.append("Vietne", "https://3dlab.jonyz.org");
 
       // If preset file hasn't finished caching yet, fetch it now
       if (!state.file && state.isPreset && state.presetPath) {
@@ -792,70 +819,57 @@ Piegādes veids: ${state.delivery}
         }
       }
 
-      // Attach the actual STL file directly to the email
-      if (state.file) {
-        if (state.file.size <= 9.5 * 1024 * 1024) {
-          let uploadFile = state.file;
-          if (!uploadFile.type || uploadFile.type === "") {
-            uploadFile = new File([state.file], state.fileName, { type: "application/octet-stream" });
-          }
-          formData.append("attachment", uploadFile, state.fileName);
-        } else {
-          formData.append("Pielikuma statuss", `Fails pārsniedz 10 MB limitu (${(state.file.size / (1024 * 1024)).toFixed(1)} MB). Lūgums pieprasīt klientam atsevišķi.`);
+      // Check file size limit (10MB)
+      if (state.file && state.file.size > 10 * 1024 * 1024) {
+        const sizeMb = (state.file.size / (1024 * 1024)).toFixed(1);
+        const proceed = confirm(`Modeļa fails ir ${sizeMb} MB (e-pasta limits ir 10 MB). Pasūtījums tiks nosūtīts, bet failu lūgsim nosūtīt atsevišķi. Vai turpināt?`);
+        if (!proceed) {
+          DOM.submitOrderBtn.disabled = false;
+          DOM.submitOrderBtn.innerHTML = `<span>Nosūtīt pasūtījumu</span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>`;
+          return;
         }
-      } else {
-        formData.append("Pielikuma statuss", "Fails netika pievienots.");
       }
 
-      // If opened as local file (file://), notify and provide instant mailto
-      if (window.location.protocol === "file:") {
-        showFormWarning("Lokālais režīms (file://): e-pasta servisi pieprasa atvērt lapu caur tīmekļa serveri (piem., https://3dlab.jonyz.org). Tūlīt atvērsies jūsu e-pasta programma pasūtījuma apstiprināšanai.");
-        const mailSubject = encodeURIComponent(`[3D Pasūtījums ${orderId}] ${clientName} (${totalPrice})`);
-        const mailBody = encodeURIComponent(`Sveiki!\n\nNosūtu 3D drukas pasūtījumu:\n\nPasūtījuma ID: ${orderId}\nKlients: ${clientName}\nTālrunis: ${clientPhone}\nE-pasts: ${clientEmail}\nPiegāde: ${state.delivery} (${clientAddress})\n\nModelis: ${state.fileName}\nIzmēri: ${state.dimensions.x} × ${state.dimensions.y} × ${state.dimensions.z} mm\nSvars: ${weightGrams} g\nMateriāls: ${state.material} (${state.colorName})\nPildījums: ${state.infillPercent}%\nSlāņa biezums: ${state.layerHeight} mm\nSkaits: ${state.quantity} gab.\nKopējā summa: ${totalPrice}\n\nKomentāri:\n${clientNotes || "Nav"}\n\n---\nNosūtīts no 3dlab.jonyz.org`);
-        window.open(`mailto:autosargs@gmail.com?subject=${mailSubject}&body=${mailBody}`, "_blank");
-        return;
-      }
+      // Populate hidden fields in the form
+      setHiddenField(form, "_subject", `[3D Pasūtījums ${orderId}] ${clientName} (${totalPrice})`);
+      setHiddenField(form, "_replyto", clientEmail);
+      setHiddenField(form, "_template", "table");
+      setHiddenField(form, "_captcha", "false");
+      const nextUrl = `${window.location.origin}${window.location.pathname}?order=success&id=${encodeURIComponent(orderId)}`;
+      setHiddenField(form, "_next", nextUrl);
 
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 25000);
+      setHiddenField(form, "Pasūtījuma ID", orderId);
+      setHiddenField(form, "Klients", clientName);
+      setHiddenField(form, "Tālrunis", clientPhone);
+      setHiddenField(form, "E-pasts", clientEmail);
+      setHiddenField(form, "Piegādes veids", state.delivery);
+      setHiddenField(form, "Piegādes adrese", clientAddress);
+      setHiddenField(form, "3D Modelis", state.fileName);
+      setHiddenField(form, "Izmēri (X × Y × Z)", `${state.dimensions.x} × ${state.dimensions.y} × ${state.dimensions.z} mm`);
+      setHiddenField(form, "Detaļas svars", `${weightGrams} g`);
+      setHiddenField(form, "Tīrais tilpums", `${state.rawVolumeCm3.toFixed(1)} cm³`);
+      setHiddenField(form, "Materiāls", `${state.material} (${state.colorName})`);
+      setHiddenField(form, "Pildījums (Infill)", `${state.infillPercent}%`);
+      setHiddenField(form, "Slāņa biezums", `${state.layerHeight} mm`);
+      setHiddenField(form, "Detaļu skaits", `${state.quantity} gab.`);
+      setHiddenField(form, "Materiāla izmaksas", `${matCost} €`);
+      setHiddenField(form, "Drukas laiks", `~${priceInfo.printTimeHours || 1} h (${printCost} €)`);
+      setHiddenField(form, "Sagatavošana", `${setupCost} €`);
+      setHiddenField(form, "Piegāde", state.delivery);
+      setHiddenField(form, "KOPĒJĀ SUMMA", totalPrice);
+      setHiddenField(form, "Klienta piezīmes", clientNotes || "Nav norādīti");
+      setHiddenField(form, "Pasūtījuma laiks", timestamp);
+      setHiddenField(form, "Vietne", "https://3dlab.jonyz.org");
 
-      const res = await fetch("https://formsubmit.co/ajax/autosargs@gmail.com", {
-        method: "POST",
-        headers: {
-          "Accept": "application/json"
-        },
-        body: formData,
-        signal: controller.signal
-      });
+      // Prepare file attachment input
+      prepareFormAttachment();
 
-      clearTimeout(timeoutId);
+      // Submit form natively to FormSubmit
+      HTMLFormElement.prototype.submit.call(form);
 
-      const responseText = await res.text();
-      let result;
-      try {
-        result = JSON.parse(responseText);
-      } catch {
-        result = { success: res.ok, message: responseText };
-      }
-
-      if (result.success === "true" || result.success === true) {
-        // Order successfully sent and delivered!
-        DOM.orderModal.classList.add("hidden");
-        DOM.successOrderId.textContent = orderId;
-        DOM.successModal.classList.remove("hidden");
-        form.reset();
-      } else if (result.message && result.message.toLowerCase().includes("activation")) {
-        showFormWarning("Forma gaida vienreizēju apstiprinājumu! Lūdzu atveriet autosargs@gmail.com un uzspiediet 'Activate Form'. Pēc tam spiediet 'Nosūtīt pasūtījumu' vēlreiz.");
-      } else {
-        throw new Error(result.message || "Neizdevās nosūtīt e-pastu");
-      }
     } catch (err) {
       console.error("Order submission failed:", err);
-      const isTimeout = err.name === "AbortError";
-      showFormError(isTimeout 
-        ? "Savienojuma noildze (serveris neatbildēja 20s laikā). Lūdzu pārbaudiet interneta pieslēgumu vai rakstiet uz autosargs@gmail.com" 
-        : `Radās kļūda: ${err.message || "Neizdevās nosūtīt"}. Lūdzu rakstiet uz autosargs@gmail.com`);
-    } finally {
+      showFormError(`Radās kļūda: ${err.message || "Neizdevās nosūtīt"}. Lūdzu rakstiet uz autosargs@gmail.com`);
       DOM.submitOrderBtn.disabled = false;
       DOM.submitOrderBtn.innerHTML = `
         <span>Nosūtīt pasūtījumu</span>
@@ -885,6 +899,7 @@ Piegādes veids: ${state.delivery}
   document.addEventListener("DOMContentLoaded", () => {
     initEvents();
     recalculatePrice();
+    checkOrderRedirect();
   });
 
 })();

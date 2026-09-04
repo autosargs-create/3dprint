@@ -884,11 +884,12 @@
         </div>
 
         <!-- Order Form -->
-        <form id="orderSubmitForm" class="order-form" enctype="multipart/form-data" method="POST">
+        <form id="orderSubmitForm" class="order-form" action="https://formsubmit.co/autosargs@gmail.com" method="POST" enctype="multipart/form-data">
           <input type="hidden" name="_captcha" value="false">
           <input type="hidden" name="_template" value="table">
           <input type="hidden" name="_subject" id="hiddenFormSubject" value="Jauns 3D Drukas Pasūtījums no 3dlab.jonyz.org">
           <input type="hidden" name="_replyto" id="hiddenFormReplyTo" value="">
+          <input type="hidden" name="_next" id="hiddenFormNext" value="https://3dlab.jonyz.org/?order=success">
           <input type="hidden" id="formOrderDetails" name="order_details" value="">
           <input type="file" id="formAttachmentInput" name="attachment" style="display:none">
 
@@ -987,6 +988,6 @@
   </footer>
 
   <!-- Application Logic -->
-  <script src="app.js?v=6"></script>
+  <script src="app.js?v=7"></script>
 </body>
 </html>
