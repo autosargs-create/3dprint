@@ -758,36 +758,17 @@ Piegādes veids: ${state.delivery}
 
     try {
       const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 12000);
+      const timeoutId = setTimeout(() => controller.abort(), 20000);
 
-      // Try first-party Cloudflare Pages function first, fallback to direct FormSubmit
-      let res;
-      try {
-        res = await fetch("/api/order", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "Accept": "application/json"
-          },
-          body: JSON.stringify(orderData),
-          signal: controller.signal
-        });
-        if (!res.ok && res.status === 404) {
-          throw new Error("404 fallback");
-        }
-      } catch (firstPartyErr) {
-        if (firstPartyErr.name === "AbortError") throw firstPartyErr;
-        // Fallback to direct FormSubmit endpoint
-        res = await fetch("https://formsubmit.co/ajax/autosargs@gmail.com", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "Accept": "application/json"
-          },
-          body: JSON.stringify(orderData),
-          signal: controller.signal
-        });
-      }
+      const res = await fetch("https://formsubmit.co/ajax/autosargs@gmail.com", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json"
+        },
+        body: JSON.stringify(orderData),
+        signal: controller.signal
+      });
 
       clearTimeout(timeoutId);
 
@@ -814,7 +795,7 @@ Piegādes veids: ${state.delivery}
       console.error("Order submission failed:", err);
       const isTimeout = err.name === "AbortError";
       showFormError(isTimeout 
-        ? "Savienojuma noildze (serveris neatbildēja 12s laikā). Lūdzu pārbaudiet interneta pieslēgumu vai rakstiet uz autosargs@gmail.com" 
+        ? "Savienojuma noildze (serveris neatbildēja 20s laikā). Lūdzu pārbaudiet interneta pieslēgumu vai rakstiet uz autosargs@gmail.com" 
         : `Radās kļūda: ${err.message || "Neizdevās nosūtīt"}. Lūdzu rakstiet uz autosargs@gmail.com`);
     } finally {
       DOM.submitOrderBtn.disabled = false;
