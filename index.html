@@ -52,7 +52,7 @@
 
       <nav class="nav-menu">
         <a href="#calculator" class="nav-link">Kalkulators</a>
-        <a href="#models" class="nav-link">Gatavie modeļi</a>
+        <a href="#models" class="nav-link">Printables Trendi</a>
         <a href="#materials" class="nav-link">Materiāli</a>
         <a href="#faq" class="nav-link">BUJ</a>
       </nav>
@@ -82,7 +82,7 @@
         </a>
         <a href="#models" class="btn btn-secondary">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
-          Izvēlēties gatavu dizainu
+          Printables Trendi 🔥
         </a>
       </div>
 
@@ -346,20 +346,40 @@
     </div>
   </section>
 
-    <!-- Popular Ready-to-Print Models Catalog -->
+  <!-- Trending Printables Live Ticker Section -->
   <section id="models" class="models-section">
     <div class="container">
-      <div class="section-header text-center">
-        <span class="section-tag">GATAVIE DIZAINI</span>
-        <h2 class="section-title">Populārākie 3D modeļi (Gatavi drukai)</h2>
-        <p class="section-sub">Izvēlies kādu no pārbaudītajiem dizainiem — nospied pogu un apskati īsto 3D modeli kalkulatorā!</p>
+      <div class="ticker-header-wrap">
+        <div>
+          <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+            <span class="ticker-live-pill"><span class="ticker-live-dot"></span> TIEŠRAIDES TRENDI</span>
+            <span class="section-tag" style="margin: 0;">PRINTABLES.COM</span>
+          </div>
+          <h2 class="section-title" style="margin-bottom: 6px;">Pašlaik Karstākie 3D Printi</h2>
+          <p class="section-sub" style="margin: 0; max-width: 650px;">
+            Iedvesmojies no pasaulē populārākajiem 3D dizainiem. Uzklikšķini uz jebkura modeļa, lai to apskatītu un bez maksas lejupielādētu Printables vietnē!
+          </p>
+        </div>
+        <div class="ticker-controls">
+          <button type="button" id="tickerPauseBtn" class="ticker-btn" title="Pauzēt vai atsākt lentas kustību">
+            <span id="tickerPauseIcon">⏸</span> <span id="tickerPauseText">Pauzēt lentu</span>
+          </button>
+          <a href="https://www.printables.com" target="_blank" rel="noopener noreferrer" class="ticker-btn" title="Atvērt Printables.com sākumlapu">
+            Printables.com ↗
+          </a>
+        </div>
       </div>
+    </div>
 
-      <div class="preset-grid">
-        <!-- Preset 1: 3D Benchy -->
-        <div class="preset-card glass-panel">
-          <div class="preset-img-wrap preset-svg-wrap">
-            <div class="preset-badge">Klasika & Etalons</div>
+    <!-- Continuous Scrolling Marquee Stream -->
+    <div class="ticker-stream-outer" id="tickerOuter">
+      <div class="ticker-stream-track" id="tickerTrack">
+        <!-- ===== SET 1 ===== -->
+        <!-- Card 1: 3D Benchy -->
+        <a href="https://www.printables.com/model/3161-3d-benchy" target="_blank" rel="noopener noreferrer" class="ticker-card">
+          <div class="ticker-card-img-wrap">
+            <div class="ticker-badge-top">🔥 #1 Etalons</div>
+            <div class="ticker-badge-rating">⭐ 4.9</div>
             <svg class="preset-vector" viewBox="0 0 240 180" fill="none" xmlns="http://www.w3.org/2000/svg">
               <defs>
                 <radialGradient id="glowBenchy" cx="50%" cy="50%" r="50%">
@@ -368,47 +388,172 @@
                 </radialGradient>
               </defs>
               <circle cx="120" cy="90" r="70" fill="url(#glowBenchy)"/>
-              <!-- Waterline / Base plate -->
               <line x1="30" y1="140" x2="210" y2="140" stroke="#1e293b" stroke-width="2" stroke-dasharray="4 4"/>
-              <!-- 3D Benchy Hull -->
               <path d="M 45 130 C 50 138, 185 138, 195 125 C 205 110, 185 105, 175 105 L 55 105 C 45 105, 40 120, 45 130 Z" fill="#0f172a" stroke="#00f0ff" stroke-width="2.5" stroke-linejoin="round"/>
-              <!-- Hawsehole (Bow eye) -->
               <circle cx="178" cy="113" r="4.5" fill="#070a12" stroke="#00f0ff" stroke-width="1.8"/>
-              <!-- Cabin -->
               <path d="M 75 105 L 75 62 L 135 62 L 135 105 Z" fill="#131c2e" stroke="#00f0ff" stroke-width="2.2" stroke-linejoin="round"/>
-              <!-- Cabin Roof -->
               <path d="M 68 62 C 70 56, 140 56, 142 62 Z" fill="#00f0ff" fill-opacity="0.3" stroke="#00f0ff" stroke-width="2"/>
-              <!-- Windows -->
               <rect x="85" y="70" width="16" height="18" rx="2" fill="#070a12" stroke="#38bdf8" stroke-width="1.5"/>
               <rect x="110" y="70" width="16" height="18" rx="2" fill="#070a12" stroke="#38bdf8" stroke-width="1.5"/>
-              <circle cx="80" cy="80" r="4" fill="#070a12" stroke="#38bdf8" stroke-width="1.5"/>
-              <!-- Chimney / Smoke stack -->
               <rect x="100" y="44" width="12" height="14" rx="1.5" fill="#ff6b00" fill-opacity="0.25" stroke="#ff6b00" stroke-width="2"/>
-              <!-- Rear Cargo box -->
               <rect x="52" y="112" width="18" height="12" rx="1" fill="#070a12" stroke="#00f0ff" stroke-width="1.5"/>
             </svg>
           </div>
-          <div class="preset-content">
-            <h3 class="preset-title">3D Benchy Kalibrācijas Kuģītis</h3>
-            <p class="preset-desc">Pasaulē populārākais 3D drukas etalons, suvenīrs un tolerances pārbaudes modelis.</p>
-            <div class="preset-specs font-mono">
-              <span>📐 ~60×31×48 mm</span>
-              <span>🧪 PLA / PETG</span>
+          <div class="ticker-card-body">
+            <div class="ticker-author-row">
+              <span class="ticker-author-name">👤 CreativeTools</span>
+              <span class="ticker-tag">Kalibrācija</span>
             </div>
-            <button type="button" class="btn btn-outline btn-block select-preset-btn"
-              data-name="3D Benchy Kuģītis"
-              data-model="models/benchy.stl"
-              data-material="PLA"
-              data-infill="15">
-              ⚡ Drukāt šo modeli
-            </button>
+            <h3 class="ticker-card-title">3D Benchy Kuģītis</h3>
+            <p class="ticker-card-desc">Pasaulē populārākais 3D drukas kvalitātes etalons un tolerances pārbaudes modelis.</p>
+            <div class="ticker-card-footer">
+              <span class="ticker-downloads">📥 540k+ lejuplādes</span>
+              <span class="ticker-action-link">Printables ↗</span>
+            </div>
           </div>
-        </div>
+        </a>
 
-        <!-- Preset 2: Ergonomic Phone Stand -->
-        <div class="preset-card glass-panel">
-          <div class="preset-img-wrap preset-svg-wrap">
-            <div class="preset-badge">Praktisks galda aksesuārs</div>
+        <!-- Card 2: Dummy 13 -->
+        <a href="https://www.printables.com/model/577187-dummy-13-printable-jointed-figure-beta-files" target="_blank" rel="noopener noreferrer" class="ticker-card">
+          <div class="ticker-card-img-wrap">
+            <div class="ticker-badge-top">🔥 Virāls Hīts</div>
+            <div class="ticker-badge-rating">⭐ 5.0</div>
+            <svg class="preset-vector" viewBox="0 0 240 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <radialGradient id="glowDummy" cx="50%" cy="50%" r="50%">
+                  <stop offset="0%" stop-color="#ff6b00" stop-opacity="0.25"/>
+                  <stop offset="100%" stop-color="#ff6b00" stop-opacity="0"/>
+                </radialGradient>
+              </defs>
+              <circle cx="120" cy="90" r="70" fill="url(#glowDummy)"/>
+              <rect x="110" y="24" width="20" height="20" rx="4" fill="#0f172a" stroke="#00f0ff" stroke-width="2.2"/>
+              <line x1="114" y1="33" x2="126" y2="33" stroke="#ff6b00" stroke-width="2" stroke-linecap="round"/>
+              <circle cx="120" cy="48" r="3" fill="#00f0ff"/>
+              <path d="M 104 53 L 136 53 L 130 90 L 110 90 Z" fill="#131c2e" stroke="#00f0ff" stroke-width="2.2" stroke-linejoin="round"/>
+              <circle cx="120" cy="68" r="5" fill="#ff6b00" stroke="#00f0ff" stroke-width="1.5"/>
+              <circle cx="98" cy="58" r="4.5" fill="#070a12" stroke="#00f0ff" stroke-width="1.8"/>
+              <line x1="95" y1="62" x2="80" y2="85" stroke="#00f0ff" stroke-width="3" stroke-linecap="round"/>
+              <circle cx="78" cy="88" r="4" fill="#ff6b00"/>
+              <line x1="78" y1="92" x2="68" y2="120" stroke="#00f0ff" stroke-width="2.5" stroke-linecap="round"/>
+              <circle cx="142" cy="58" r="4.5" fill="#070a12" stroke="#00f0ff" stroke-width="1.8"/>
+              <line x1="145" y1="62" x2="160" y2="82" stroke="#00f0ff" stroke-width="3" stroke-linecap="round"/>
+              <circle cx="162" cy="84" r="4" fill="#ff6b00"/>
+              <line x1="162" y1="88" x2="175" y2="110" stroke="#00f0ff" stroke-width="2.5" stroke-linecap="round"/>
+              <rect x="110" y="93" width="20" height="12" rx="3" fill="#0f172a" stroke="#00f0ff" stroke-width="2"/>
+              <circle cx="111" cy="108" r="4" fill="#ff6b00"/>
+              <line x1="111" y1="112" x2="105" y2="142" stroke="#00f0ff" stroke-width="3" stroke-linecap="round"/>
+              <circle cx="104" cy="144" r="3.5" fill="#00f0ff"/>
+              <line x1="104" y1="147" x2="100" y2="166" stroke="#00f0ff" stroke-width="2.5" stroke-linecap="round"/>
+              <rect x="94" y="165" width="14" height="6" rx="2" fill="#ff6b00"/>
+              <circle cx="129" cy="108" r="4" fill="#ff6b00"/>
+              <line x1="129" y1="112" x2="135" y2="142" stroke="#00f0ff" stroke-width="3" stroke-linecap="round"/>
+              <circle cx="136" cy="144" r="3.5" fill="#00f0ff"/>
+              <line x1="136" y1="147" x2="140" y2="166" stroke="#00f0ff" stroke-width="2.5" stroke-linecap="round"/>
+              <rect x="134" y="165" width="14" height="6" rx="2" fill="#ff6b00"/>
+            </svg>
+          </div>
+          <div class="ticker-card-body">
+            <div class="ticker-author-row">
+              <span class="ticker-author-name">👤 soozafone</span>
+              <span class="ticker-tag">Artikulēts</span>
+            </div>
+            <h3 class="ticker-card-title">Dummy 13 Kustīgā Figūra</h3>
+            <p class="ticker-card-desc">Kulta statusu ieguvis, pilnībā artikulēts kustīgais action-figure robots ar aksesuāriem.</p>
+            <div class="ticker-card-footer">
+              <span class="ticker-downloads">📥 280k+ lejuplādes</span>
+              <span class="ticker-action-link">Printables ↗</span>
+            </div>
+          </div>
+        </a>
+
+        <!-- Card 3: Honeycomb Storage Wall -->
+        <a href="https://www.printables.com/model/152592-honeycomb-storage-wall" target="_blank" rel="noopener noreferrer" class="ticker-card">
+          <div class="ticker-card-img-wrap">
+            <div class="ticker-badge-top">🛠️ Darbnīcai</div>
+            <div class="ticker-badge-rating">⭐ 4.9</div>
+            <svg class="preset-vector" viewBox="0 0 240 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <radialGradient id="glowHoneycomb" cx="50%" cy="50%" r="50%">
+                  <stop offset="0%" stop-color="#00f0ff" stop-opacity="0.22"/>
+                  <stop offset="100%" stop-color="#00f0ff" stop-opacity="0"/>
+                </radialGradient>
+              </defs>
+              <circle cx="120" cy="90" r="70" fill="url(#glowHoneycomb)"/>
+              <g stroke="#00f0ff" stroke-width="2" fill="#0f172a" fill-opacity="0.75">
+                <polygon points="90,45 105,37 120,45 120,62 105,70 90,62" />
+                <polygon points="120,45 135,37 150,45 150,62 135,70 120,62" />
+                <polygon points="75,70 90,62 105,70 105,87 90,95 75,87" />
+                <polygon points="105,70 120,62 135,70 135,87 120,95 105,87" fill="#131c2e" stroke="#38bdf8"/>
+                <polygon points="135,70 150,62 165,70 165,87 150,95 135,87" />
+                <polygon points="60,95 75,87 90,95 90,112 75,120 60,112" />
+                <polygon points="90,95 105,87 120,95 120,112 105,120 90,112" />
+                <polygon points="120,95 135,87 150,95 150,112 135,120 120,112" fill="#131c2e" stroke="#ff6b00" stroke-width="2.5"/>
+                <polygon points="150,95 165,87 180,95 180,112 165,120 150,112" />
+                <polygon points="75,120 90,112 105,120 105,137 90,145 75,137" />
+                <polygon points="105,120 120,112 135,120 135,137 120,145 105,137" />
+                <polygon points="135,120 150,112 165,120 165,137 150,145 135,137" />
+              </g>
+              <path d="M 130 95 L 142 95 L 142 125 C 142 132, 134 135, 128 135" fill="none" stroke="#ff6b00" stroke-width="3.5" stroke-linecap="round"/>
+              <circle cx="120" cy="95" r="3" fill="#00f0ff"/>
+            </svg>
+          </div>
+          <div class="ticker-card-body">
+            <div class="ticker-author-row">
+              <span class="ticker-author-name">👤 RostaP</span>
+              <span class="ticker-tag">Organizācija</span>
+            </div>
+            <h3 class="ticker-card-title">Honeycomb Sienas Sistēma</h3>
+            <p class="ticker-card-desc">Modulāra šūnveida sienas stiprinājumu sistēma instrumentiem un aksesuāriem darbnīcā.</p>
+            <div class="ticker-card-footer">
+              <span class="ticker-downloads">📥 350k+ lejuplādes</span>
+              <span class="ticker-action-link">Printables ↗</span>
+            </div>
+          </div>
+        </a>
+
+        <!-- Card 4: Gridfinity -->
+        <a href="https://www.printables.com/model/242711-gridfinity-master-collection" target="_blank" rel="noopener noreferrer" class="ticker-card">
+          <div class="ticker-card-img-wrap">
+            <div class="ticker-badge-top">📐 Modulārs</div>
+            <div class="ticker-badge-rating">⭐ 4.9</div>
+            <svg class="preset-vector" viewBox="0 0 240 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <radialGradient id="glowGridfinity" cx="50%" cy="50%" r="50%">
+                  <stop offset="0%" stop-color="#38bdf8" stop-opacity="0.25"/>
+                  <stop offset="100%" stop-color="#38bdf8" stop-opacity="0"/>
+                </radialGradient>
+              </defs>
+              <circle cx="120" cy="90" r="70" fill="url(#glowGridfinity)"/>
+              <line x1="30" y1="148" x2="210" y2="148" stroke="#1e293b" stroke-width="2" stroke-dasharray="4 4"/>
+              <polygon points="120,42 185,72 120,102 55,72" fill="#162035" stroke="#00f0ff" stroke-width="2.5"/>
+              <polygon points="120,57 152,72 120,87 88,72" fill="#0f172a" stroke="#38bdf8" stroke-width="1.8"/>
+              <line x1="120" y1="57" x2="120" y2="87" stroke="#ff6b00" stroke-width="2"/>
+              <polygon points="55,72 120,102 120,142 55,112" fill="#0f172a" stroke="#00f0ff" stroke-width="2.5"/>
+              <polygon points="120,102 185,72 185,112 120,142" fill="#131c2e" stroke="#00f0ff" stroke-width="2.5"/>
+              <polygon points="125,92 155,78 155,85 125,99" fill="#ff6b00" stroke="#ff6b00" stroke-width="1"/>
+              <line x1="55" y1="112" x2="65" y2="120" stroke="#00f0ff" stroke-width="1.5"/>
+              <line x1="65" y1="120" x2="120" y2="146" stroke="#00f0ff" stroke-width="1.5"/>
+            </svg>
+          </div>
+          <div class="ticker-card-body">
+            <div class="ticker-author-row">
+              <span class="ticker-author-name">👤 Zack Freedman</span>
+              <span class="ticker-tag">Standarts</span>
+            </div>
+            <h3 class="ticker-card-title">Gridfinity Modulārā Kaste</h3>
+            <p class="ticker-card-desc">Pasaulē atzītākais atvilktņu un instrumentu organizatoru atvērtā koda standarts.</p>
+            <div class="ticker-card-footer">
+              <span class="ticker-downloads">📥 220k+ lejuplādes</span>
+              <span class="ticker-action-link">Printables ↗</span>
+            </div>
+          </div>
+        </a>
+
+        <!-- Card 5: Folding Phone Stand -->
+        <a href="https://www.printables.com/model/13956-folding-phone-stand" target="_blank" rel="noopener noreferrer" class="ticker-card">
+          <div class="ticker-card-img-wrap">
+            <div class="ticker-badge-top">📱 Galda Aksesuārs</div>
+            <div class="ticker-badge-rating">⭐ 4.8</div>
             <svg class="preset-vector" viewBox="0 0 240 180" fill="none" xmlns="http://www.w3.org/2000/svg">
               <defs>
                 <radialGradient id="glowPhone" cx="50%" cy="50%" r="50%">
@@ -418,38 +563,74 @@
               </defs>
               <circle cx="120" cy="90" r="70" fill="url(#glowPhone)"/>
               <line x1="30" y1="145" x2="210" y2="145" stroke="#1e293b" stroke-width="2" stroke-dasharray="4 4"/>
-              <!-- Phone Stand base and backplate -->
               <path d="M 65 140 L 155 140 L 165 125 L 140 50 L 125 50 L 105 115 L 85 115 L 75 128 L 65 140 Z" fill="#0f172a" stroke="#00f0ff" stroke-width="2.5" stroke-linejoin="round"/>
-              <!-- Angled Smartphone Silhouette -->
               <rect x="92" y="32" width="55" height="100" rx="6" transform="rotate(-15 92 32)" fill="#1e293b" stroke="#ff6b00" stroke-width="2" fill-opacity="0.6"/>
-              <!-- Phone Screen details -->
               <line x1="110" y1="42" x2="135" y2="36" stroke="#ff6b00" stroke-width="1.5" stroke-linecap="round"/>
               <rect x="110" y="60" width="22" height="4" rx="2" transform="rotate(-15 110 60)" fill="#38bdf8" fill-opacity="0.7"/>
-              <!-- Cable routing cutout -->
               <rect x="95" y="125" width="14" height="15" rx="3" fill="#070a12" stroke="#00f0ff" stroke-width="1.8"/>
             </svg>
           </div>
-          <div class="preset-content">
-            <h3 class="preset-title">Ergonomisks Telefona Statīvs</h3>
-            <p class="preset-desc">Stabils galda statīvs ar optimālu skata leņķi videozvaniem un kabelim paredzētu gropi.</p>
-            <div class="preset-specs font-mono">
-              <span>📐 ~164×71×37 mm</span>
-              <span>🧪 PETG</span>
+          <div class="ticker-card-body">
+            <div class="ticker-author-row">
+              <span class="ticker-author-name">👤 roland</span>
+              <span class="ticker-tag">Salokāms</span>
             </div>
-            <button type="button" class="btn btn-outline btn-block select-preset-btn"
-              data-name="Ergonomisks Telefona Statīvs"
-              data-model="models/phone_stand.stl"
-              data-material="PETG"
-              data-infill="30">
-              ⚡ Drukāt šo modeli
-            </button>
+            <h3 class="ticker-card-title">Salokāms Telefona Statīvs</h3>
+            <p class="ticker-card-desc">Stabils galda statīvs telefonam ar regulējamu leņķi videozvaniem un kabeļa gropi.</p>
+            <div class="ticker-card-footer">
+              <span class="ticker-downloads">📥 95k+ lejuplādes</span>
+              <span class="ticker-action-link">Printables ↗</span>
+            </div>
           </div>
-        </div>
+        </a>
 
-        <!-- Preset 3: Under-desk Headphone Holder -->
-        <div class="preset-card glass-panel">
-          <div class="preset-img-wrap preset-svg-wrap">
-            <div class="preset-badge">Darba vietai</div>
+        <!-- Card 6: Rugged Box -->
+        <a href="https://www.printables.com/model/258431-rugged-box-parametric" target="_blank" rel="noopener noreferrer" class="ticker-card">
+          <div class="ticker-card-img-wrap">
+            <div class="ticker-badge-top">⚡ Triecienizturīgs</div>
+            <div class="ticker-badge-rating">⭐ 4.9</div>
+            <svg class="preset-vector" viewBox="0 0 240 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <radialGradient id="glowRugged" cx="50%" cy="50%" r="50%">
+                  <stop offset="0%" stop-color="#ff6b00" stop-opacity="0.22"/>
+                  <stop offset="100%" stop-color="#ff6b00" stop-opacity="0"/>
+                </radialGradient>
+              </defs>
+              <circle cx="120" cy="90" r="70" fill="url(#glowRugged)"/>
+              <line x1="30" y1="148" x2="210" y2="148" stroke="#1e293b" stroke-width="2" stroke-dasharray="4 4"/>
+              <rect x="55" y="60" width="130" height="35" rx="7" fill="#131c2e" stroke="#00f0ff" stroke-width="2.5"/>
+              <rect x="75" y="60" width="10" height="35" fill="#0f172a" stroke="#00f0ff" stroke-width="1.5"/>
+              <rect x="100" y="60" width="10" height="35" fill="#0f172a" stroke="#00f0ff" stroke-width="1.5"/>
+              <rect x="130" y="60" width="10" height="35" fill="#0f172a" stroke="#00f0ff" stroke-width="1.5"/>
+              <rect x="155" y="60" width="10" height="35" fill="#0f172a" stroke="#00f0ff" stroke-width="1.5"/>
+              <line x1="55" y1="95" x2="185" y2="95" stroke="#ff6b00" stroke-width="2.5"/>
+              <rect x="55" y="95" width="130" height="48" rx="6" fill="#0f172a" stroke="#00f0ff" stroke-width="2.5"/>
+              <rect x="80" y="85" width="16" height="25" rx="3" fill="#1e293b" stroke="#ff6b00" stroke-width="2"/>
+              <circle cx="88" cy="97" r="2.5" fill="#00f0ff"/>
+              <rect x="144" y="85" width="16" height="25" rx="3" fill="#1e293b" stroke="#ff6b00" stroke-width="2"/>
+              <circle cx="152" cy="97" r="2.5" fill="#00f0ff"/>
+              <path d="M 98 60 C 98 46, 142 46, 142 60" stroke="#00f0ff" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <div class="ticker-card-body">
+            <div class="ticker-author-row">
+              <span class="ticker-author-name">👤 Whity</span>
+              <span class="ticker-tag">Aizsargkaste</span>
+            </div>
+            <h3 class="ticker-card-title">Izturīgā Aizsargkaste</h3>
+            <p class="ticker-card-desc">Triecienizturīgs futrālis ar stiprām eņģēm, aizbīdņiem un hermētisku blīvgredzenu.</p>
+            <div class="ticker-card-footer">
+              <span class="ticker-downloads">📥 115k+ lejuplādes</span>
+              <span class="ticker-action-link">Printables ↗</span>
+            </div>
+          </div>
+        </a>
+
+        <!-- Card 7: Headphone Hanger -->
+        <a href="https://www.printables.com/model/58428-under-desk-headphone-holder" target="_blank" rel="noopener noreferrer" class="ticker-card">
+          <div class="ticker-card-img-wrap">
+            <div class="ticker-badge-top">🎧 Darba Vide</div>
+            <div class="ticker-badge-rating">⭐ 4.8</div>
             <svg class="preset-vector" viewBox="0 0 240 180" fill="none" xmlns="http://www.w3.org/2000/svg">
               <defs>
                 <radialGradient id="glowPhones" cx="50%" cy="50%" r="50%">
@@ -458,42 +639,35 @@
                 </radialGradient>
               </defs>
               <circle cx="120" cy="90" r="70" fill="url(#glowPhones)"/>
-              <!-- Desk underside surface -->
               <rect x="30" y="32" width="180" height="8" rx="2" fill="#1e293b" stroke="#334155" stroke-width="1.5"/>
-              <!-- Mounting bracket plate -->
               <rect x="80" y="40" width="75" height="10" rx="2" fill="#0f172a" stroke="#00f0ff" stroke-width="2"/>
-              <!-- Screws -->
               <circle cx="95" cy="45" r="2.5" fill="#38bdf8"/>
               <circle cx="140" cy="45" r="2.5" fill="#38bdf8"/>
-              <!-- Vertical drop arm -->
               <path d="M 80 50 L 80 115 C 80 125, 95 130, 115 130 L 155 130 L 160 115 L 120 115 C 105 115, 95 110, 95 95 L 95 50 Z" fill="#0f172a" stroke="#00f0ff" stroke-width="2.5" stroke-linejoin="round"/>
-              <!-- Headphone earcups & headband outline -->
               <path d="M 125 115 C 130 90, 165 90, 170 115" stroke="#ff6b00" stroke-width="3" stroke-linecap="round"/>
               <rect x="118" y="112" width="12" height="24" rx="5" fill="#1e293b" stroke="#ff6b00" stroke-width="1.8"/>
               <rect x="165" y="112" width="12" height="24" rx="5" fill="#1e293b" stroke="#ff6b00" stroke-width="1.8"/>
             </svg>
           </div>
-          <div class="preset-content">
-            <h3 class="preset-title">Zemgalda Austiņu Turētājs</h3>
-            <p class="preset-desc">Izturīgs kronšteins montāžai zem galda virsmas. Saudzē austiņu stīpu no deformācijas.</p>
-            <div class="preset-specs font-mono">
-              <span>📐 ~70×35×65 mm</span>
-              <span>🧪 PETG</span>
+          <div class="ticker-card-body">
+            <div class="ticker-author-row">
+              <span class="ticker-author-name">👤 Kopiena</span>
+              <span class="ticker-tag">Zem Galda</span>
             </div>
-            <button type="button" class="btn btn-outline btn-block select-preset-btn"
-              data-name="Zemgalda Austiņu Turētājs"
-              data-model="models/headphone_hanger.stl"
-              data-material="PETG"
-              data-infill="40">
-              ⚡ Drukāt šo modeli
-            </button>
+            <h3 class="ticker-card-title">Zemgalda Austiņu Turētājs</h3>
+            <p class="ticker-card-desc">Izturīgs kronšteins montāžai zem galda virsmas. Saudzē austiņu stīpu no deformācijas.</p>
+            <div class="ticker-card-footer">
+              <span class="ticker-downloads">📥 85k+ lejuplādes</span>
+              <span class="ticker-action-link">Printables ↗</span>
+            </div>
           </div>
-        </div>
+        </a>
 
-        <!-- Preset 4: Modular Cable Organizer -->
-        <div class="preset-card glass-panel">
-          <div class="preset-img-wrap preset-svg-wrap">
-            <div class="preset-badge">Kārtībai</div>
+        <!-- Card 8: Cable Organizer -->
+        <a href="https://www.printables.com/model/136450-spiral-cable-protector" target="_blank" rel="noopener noreferrer" class="ticker-card">
+          <div class="ticker-card-img-wrap">
+            <div class="ticker-badge-top">🔌 Kabeļiem</div>
+            <div class="ticker-badge-rating">⭐ 4.7</div>
             <svg class="preset-vector" viewBox="0 0 240 180" fill="none" xmlns="http://www.w3.org/2000/svg">
               <defs>
                 <radialGradient id="glowCable" cx="50%" cy="50%" r="50%">
@@ -503,38 +677,346 @@
               </defs>
               <circle cx="120" cy="90" r="70" fill="url(#glowCable)"/>
               <line x1="30" y1="140" x2="210" y2="140" stroke="#1e293b" stroke-width="2" stroke-dasharray="4 4"/>
-              <!-- Base block -->
               <rect x="50" y="105" width="140" height="30" rx="8" fill="#0f172a" stroke="#00f0ff" stroke-width="2.5"/>
-              <!-- 4 Cable slots -->
               <path d="M 72 105 L 72 118 M 98 105 L 98 118 M 124 105 L 124 118 M 150 105 L 150 118 M 176 105 L 176 118" stroke="#00f0ff" stroke-width="2"/>
-              <!-- Colored cables passing through -->
               <circle cx="85" cy="115" r="5" fill="#ff6b00"/>
               <circle cx="111" cy="115" r="5" fill="#38bdf8"/>
               <circle cx="137" cy="115" r="5" fill="#00e676"/>
               <circle cx="163" cy="115" r="5" fill="#e2e8f0"/>
-              <!-- Cables flowing up -->
               <path d="M 85 115 C 85 85, 75 70, 75 50" stroke="#ff6b00" stroke-width="3" stroke-linecap="round"/>
               <path d="M 111 115 C 111 80, 115 65, 115 45" stroke="#38bdf8" stroke-width="3" stroke-linecap="round"/>
               <path d="M 137 115 C 137 80, 145 65, 145 45" stroke="#00e676" stroke-width="3" stroke-linecap="round"/>
               <path d="M 163 115 C 163 85, 175 70, 175 50" stroke="#e2e8f0" stroke-width="3" stroke-linecap="round"/>
             </svg>
           </div>
-          <div class="preset-content">
-            <h3 class="preset-title">Kabeļu Organizatora Modulis</h3>
-            <p class="preset-desc">Galda kabeļu fiksators 4 vadiem (USB-C, Lightning, HDMI). Novērš vadu noslīdēšanu no galda.</p>
-            <div class="preset-specs font-mono">
-              <span>📐 ~60×24×19 mm</span>
-              <span>🧪 TPU / PETG</span>
+          <div class="ticker-card-body">
+            <div class="ticker-author-row">
+              <span class="ticker-author-name">👤 Kopiena</span>
+              <span class="ticker-tag">Vadu Aizsargs</span>
             </div>
-            <button type="button" class="btn btn-outline btn-block select-preset-btn"
-              data-name="Kabeļu Organizators"
-              data-model="models/cable_organizer.stl"
-              data-material="TPU"
-              data-infill="40">
-              ⚡ Drukāt šo modeli
-            </button>
+            <h3 class="ticker-card-title">Kabeļu Organizatora Modulis</h3>
+            <p class="ticker-card-desc">Galda kabeļu fiksators un spirālveida aizsargs. Novērš vadu pārlocīšanos un nokrišanu.</p>
+            <div class="ticker-card-footer">
+              <span class="ticker-downloads">📥 75k+ lejuplādes</span>
+              <span class="ticker-action-link">Printables ↗</span>
+            </div>
+          </div>
+        </a>
+
+        <!-- ===== SET 2 (DUPLICATE FOR SEAMLESS INFINITE SCROLL) ===== -->
+        <!-- Card 1 Dupl -->
+        <a href="https://www.printables.com/model/3161-3d-benchy" target="_blank" rel="noopener noreferrer" class="ticker-card" aria-hidden="true" tabindex="-1">
+          <div class="ticker-card-img-wrap">
+            <div class="ticker-badge-top">🔥 #1 Etalons</div>
+            <div class="ticker-badge-rating">⭐ 4.9</div>
+            <svg class="preset-vector" viewBox="0 0 240 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="120" cy="90" r="70" fill="url(#glowBenchy)"/>
+              <line x1="30" y1="140" x2="210" y2="140" stroke="#1e293b" stroke-width="2" stroke-dasharray="4 4"/>
+              <path d="M 45 130 C 50 138, 185 138, 195 125 C 205 110, 185 105, 175 105 L 55 105 C 45 105, 40 120, 45 130 Z" fill="#0f172a" stroke="#00f0ff" stroke-width="2.5" stroke-linejoin="round"/>
+              <circle cx="178" cy="113" r="4.5" fill="#070a12" stroke="#00f0ff" stroke-width="1.8"/>
+              <path d="M 75 105 L 75 62 L 135 62 L 135 105 Z" fill="#131c2e" stroke="#00f0ff" stroke-width="2.2" stroke-linejoin="round"/>
+              <path d="M 68 62 C 70 56, 140 56, 142 62 Z" fill="#00f0ff" fill-opacity="0.3" stroke="#00f0ff" stroke-width="2"/>
+              <rect x="85" y="70" width="16" height="18" rx="2" fill="#070a12" stroke="#38bdf8" stroke-width="1.5"/>
+              <rect x="110" y="70" width="16" height="18" rx="2" fill="#070a12" stroke="#38bdf8" stroke-width="1.5"/>
+              <rect x="100" y="44" width="12" height="14" rx="1.5" fill="#ff6b00" fill-opacity="0.25" stroke="#ff6b00" stroke-width="2"/>
+              <rect x="52" y="112" width="18" height="12" rx="1" fill="#070a12" stroke="#00f0ff" stroke-width="1.5"/>
+            </svg>
+          </div>
+          <div class="ticker-card-body">
+            <div class="ticker-author-row">
+              <span class="ticker-author-name">👤 CreativeTools</span>
+              <span class="ticker-tag">Kalibrācija</span>
+            </div>
+            <h3 class="ticker-card-title">3D Benchy Kuģītis</h3>
+            <p class="ticker-card-desc">Pasaulē populārākais 3D drukas kvalitātes etalons un tolerances pārbaudes modelis.</p>
+            <div class="ticker-card-footer">
+              <span class="ticker-downloads">📥 540k+ lejuplādes</span>
+              <span class="ticker-action-link">Printables ↗</span>
+            </div>
+          </div>
+        </a>
+
+        <!-- Card 2 Dupl -->
+        <a href="https://www.printables.com/model/577187-dummy-13-printable-jointed-figure-beta-files" target="_blank" rel="noopener noreferrer" class="ticker-card" aria-hidden="true" tabindex="-1">
+          <div class="ticker-card-img-wrap">
+            <div class="ticker-badge-top">🔥 Virāls Hīts</div>
+            <div class="ticker-badge-rating">⭐ 5.0</div>
+            <svg class="preset-vector" viewBox="0 0 240 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="120" cy="90" r="70" fill="url(#glowDummy)"/>
+              <rect x="110" y="24" width="20" height="20" rx="4" fill="#0f172a" stroke="#00f0ff" stroke-width="2.2"/>
+              <line x1="114" y1="33" x2="126" y2="33" stroke="#ff6b00" stroke-width="2" stroke-linecap="round"/>
+              <circle cx="120" cy="48" r="3" fill="#00f0ff"/>
+              <path d="M 104 53 L 136 53 L 130 90 L 110 90 Z" fill="#131c2e" stroke="#00f0ff" stroke-width="2.2" stroke-linejoin="round"/>
+              <circle cx="120" cy="68" r="5" fill="#ff6b00" stroke="#00f0ff" stroke-width="1.5"/>
+              <circle cx="98" cy="58" r="4.5" fill="#070a12" stroke="#00f0ff" stroke-width="1.8"/>
+              <line x1="95" y1="62" x2="80" y2="85" stroke="#00f0ff" stroke-width="3" stroke-linecap="round"/>
+              <circle cx="78" cy="88" r="4" fill="#ff6b00"/>
+              <line x1="78" y1="92" x2="68" y2="120" stroke="#00f0ff" stroke-width="2.5" stroke-linecap="round"/>
+              <circle cx="142" cy="58" r="4.5" fill="#070a12" stroke="#00f0ff" stroke-width="1.8"/>
+              <line x1="145" y1="62" x2="160" y2="82" stroke="#00f0ff" stroke-width="3" stroke-linecap="round"/>
+              <circle cx="162" cy="84" r="4" fill="#ff6b00"/>
+              <line x1="162" y1="88" x2="175" y2="110" stroke="#00f0ff" stroke-width="2.5" stroke-linecap="round"/>
+              <rect x="110" y="93" width="20" height="12" rx="3" fill="#0f172a" stroke="#00f0ff" stroke-width="2"/>
+              <circle cx="111" cy="108" r="4" fill="#ff6b00"/>
+              <line x1="111" y1="112" x2="105" y2="142" stroke="#00f0ff" stroke-width="3" stroke-linecap="round"/>
+              <circle cx="104" cy="144" r="3.5" fill="#00f0ff"/>
+              <line x1="104" y1="147" x2="100" y2="166" stroke="#00f0ff" stroke-width="2.5" stroke-linecap="round"/>
+              <rect x="94" y="165" width="14" height="6" rx="2" fill="#ff6b00"/>
+              <circle cx="129" cy="108" r="4" fill="#ff6b00"/>
+              <line x1="129" y1="112" x2="135" y2="142" stroke="#00f0ff" stroke-width="3" stroke-linecap="round"/>
+              <circle cx="136" cy="144" r="3.5" fill="#00f0ff"/>
+              <line x1="136" y1="147" x2="140" y2="166" stroke="#00f0ff" stroke-width="2.5" stroke-linecap="round"/>
+              <rect x="134" y="165" width="14" height="6" rx="2" fill="#ff6b00"/>
+            </svg>
+          </div>
+          <div class="ticker-card-body">
+            <div class="ticker-author-row">
+              <span class="ticker-author-name">👤 soozafone</span>
+              <span class="ticker-tag">Artikulēts</span>
+            </div>
+            <h3 class="ticker-card-title">Dummy 13 Kustīgā Figūra</h3>
+            <p class="ticker-card-desc">Kulta statusu ieguvis, pilnībā artikulēts kustīgais action-figure robots ar aksesuāriem.</p>
+            <div class="ticker-card-footer">
+              <span class="ticker-downloads">📥 280k+ lejuplādes</span>
+              <span class="ticker-action-link">Printables ↗</span>
+            </div>
+          </div>
+        </a>
+
+        <!-- Card 3 Dupl -->
+        <a href="https://www.printables.com/model/152592-honeycomb-storage-wall" target="_blank" rel="noopener noreferrer" class="ticker-card" aria-hidden="true" tabindex="-1">
+          <div class="ticker-card-img-wrap">
+            <div class="ticker-badge-top">🛠️ Darbnīcai</div>
+            <div class="ticker-badge-rating">⭐ 4.9</div>
+            <svg class="preset-vector" viewBox="0 0 240 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="120" cy="90" r="70" fill="url(#glowHoneycomb)"/>
+              <g stroke="#00f0ff" stroke-width="2" fill="#0f172a" fill-opacity="0.75">
+                <polygon points="90,45 105,37 120,45 120,62 105,70 90,62" />
+                <polygon points="120,45 135,37 150,45 150,62 135,70 120,62" />
+                <polygon points="75,70 90,62 105,70 105,87 90,95 75,87" />
+                <polygon points="105,70 120,62 135,70 135,87 120,95 105,87" fill="#131c2e" stroke="#38bdf8"/>
+                <polygon points="135,70 150,62 165,70 165,87 150,95 135,87" />
+                <polygon points="60,95 75,87 90,95 90,112 75,120 60,112" />
+                <polygon points="90,95 105,87 120,95 120,112 105,120 90,112" />
+                <polygon points="120,95 135,87 150,95 150,112 135,120 120,112" fill="#131c2e" stroke="#ff6b00" stroke-width="2.5"/>
+                <polygon points="150,95 165,87 180,95 180,112 165,120 150,112" />
+                <polygon points="75,120 90,112 105,120 105,137 90,145 75,137" />
+                <polygon points="105,120 120,112 135,120 135,137 120,145 105,137" />
+                <polygon points="135,120 150,112 165,120 165,137 150,145 135,137" />
+              </g>
+              <path d="M 130 95 L 142 95 L 142 125 C 142 132, 134 135, 128 135" fill="none" stroke="#ff6b00" stroke-width="3.5" stroke-linecap="round"/>
+              <circle cx="120" cy="95" r="3" fill="#00f0ff"/>
+            </svg>
+          </div>
+          <div class="ticker-card-body">
+            <div class="ticker-author-row">
+              <span class="ticker-author-name">👤 RostaP</span>
+              <span class="ticker-tag">Organizācija</span>
+            </div>
+            <h3 class="ticker-card-title">Honeycomb Sienas Sistēma</h3>
+            <p class="ticker-card-desc">Modulāra šūnveida sienas stiprinājumu sistēma instrumentiem un aksesuāriem darbnīcā.</p>
+            <div class="ticker-card-footer">
+              <span class="ticker-downloads">📥 350k+ lejuplādes</span>
+              <span class="ticker-action-link">Printables ↗</span>
+            </div>
+          </div>
+        </a>
+
+        <!-- Card 4 Dupl -->
+        <a href="https://www.printables.com/model/242711-gridfinity-master-collection" target="_blank" rel="noopener noreferrer" class="ticker-card" aria-hidden="true" tabindex="-1">
+          <div class="ticker-card-img-wrap">
+            <div class="ticker-badge-top">📐 Modulārs</div>
+            <div class="ticker-badge-rating">⭐ 4.9</div>
+            <svg class="preset-vector" viewBox="0 0 240 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="120" cy="90" r="70" fill="url(#glowGridfinity)"/>
+              <line x1="30" y1="148" x2="210" y2="148" stroke="#1e293b" stroke-width="2" stroke-dasharray="4 4"/>
+              <polygon points="120,42 185,72 120,102 55,72" fill="#162035" stroke="#00f0ff" stroke-width="2.5"/>
+              <polygon points="120,57 152,72 120,87 88,72" fill="#0f172a" stroke="#38bdf8" stroke-width="1.8"/>
+              <line x1="120" y1="57" x2="120" y2="87" stroke="#ff6b00" stroke-width="2"/>
+              <polygon points="55,72 120,102 120,142 55,112" fill="#0f172a" stroke="#00f0ff" stroke-width="2.5"/>
+              <polygon points="120,102 185,72 185,112 120,142" fill="#131c2e" stroke="#00f0ff" stroke-width="2.5"/>
+              <polygon points="125,92 155,78 155,85 125,99" fill="#ff6b00" stroke="#ff6b00" stroke-width="1"/>
+              <line x1="55" y1="112" x2="65" y2="120" stroke="#00f0ff" stroke-width="1.5"/>
+              <line x1="65" y1="120" x2="120" y2="146" stroke="#00f0ff" stroke-width="1.5"/>
+            </svg>
+          </div>
+          <div class="ticker-card-body">
+            <div class="ticker-author-row">
+              <span class="ticker-author-name">👤 Zack Freedman</span>
+              <span class="ticker-tag">Standarts</span>
+            </div>
+            <h3 class="ticker-card-title">Gridfinity Modulārā Kaste</h3>
+            <p class="ticker-card-desc">Pasaulē atzītākais atvilktņu un instrumentu organizatoru atvērtā koda standarts.</p>
+            <div class="ticker-card-footer">
+              <span class="ticker-downloads">📥 220k+ lejuplādes</span>
+              <span class="ticker-action-link">Printables ↗</span>
+            </div>
+          </div>
+        </a>
+
+        <!-- Card 5 Dupl -->
+        <a href="https://www.printables.com/model/13956-folding-phone-stand" target="_blank" rel="noopener noreferrer" class="ticker-card" aria-hidden="true" tabindex="-1">
+          <div class="ticker-card-img-wrap">
+            <div class="ticker-badge-top">📱 Galda Aksesuārs</div>
+            <div class="ticker-badge-rating">⭐ 4.8</div>
+            <svg class="preset-vector" viewBox="0 0 240 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="120" cy="90" r="70" fill="url(#glowPhone)"/>
+              <line x1="30" y1="145" x2="210" y2="145" stroke="#1e293b" stroke-width="2" stroke-dasharray="4 4"/>
+              <path d="M 65 140 L 155 140 L 165 125 L 140 50 L 125 50 L 105 115 L 85 115 L 75 128 L 65 140 Z" fill="#0f172a" stroke="#00f0ff" stroke-width="2.5" stroke-linejoin="round"/>
+              <rect x="92" y="32" width="55" height="100" rx="6" transform="rotate(-15 92 32)" fill="#1e293b" stroke="#ff6b00" stroke-width="2" fill-opacity="0.6"/>
+              <line x1="110" y1="42" x2="135" y2="36" stroke="#ff6b00" stroke-width="1.5" stroke-linecap="round"/>
+              <rect x="110" y="60" width="22" height="4" rx="2" transform="rotate(-15 110 60)" fill="#38bdf8" fill-opacity="0.7"/>
+              <rect x="95" y="125" width="14" height="15" rx="3" fill="#070a12" stroke="#00f0ff" stroke-width="1.8"/>
+            </svg>
+          </div>
+          <div class="ticker-card-body">
+            <div class="ticker-author-row">
+              <span class="ticker-author-name">👤 roland</span>
+              <span class="ticker-tag">Salokāms</span>
+            </div>
+            <h3 class="ticker-card-title">Salokāms Telefona Statīvs</h3>
+            <p class="ticker-card-desc">Stabils galda statīvs telefonam ar regulējamu leņķi videozvaniem un kabeļa gropi.</p>
+            <div class="ticker-card-footer">
+              <span class="ticker-downloads">📥 95k+ lejuplādes</span>
+              <span class="ticker-action-link">Printables ↗</span>
+            </div>
+          </div>
+        </a>
+
+        <!-- Card 6 Dupl -->
+        <a href="https://www.printables.com/model/258431-rugged-box-parametric" target="_blank" rel="noopener noreferrer" class="ticker-card" aria-hidden="true" tabindex="-1">
+          <div class="ticker-card-img-wrap">
+            <div class="ticker-badge-top">⚡ Triecienizturīgs</div>
+            <div class="ticker-badge-rating">⭐ 4.9</div>
+            <svg class="preset-vector" viewBox="0 0 240 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="120" cy="90" r="70" fill="url(#glowRugged)"/>
+              <line x1="30" y1="148" x2="210" y2="148" stroke="#1e293b" stroke-width="2" stroke-dasharray="4 4"/>
+              <rect x="55" y="60" width="130" height="35" rx="7" fill="#131c2e" stroke="#00f0ff" stroke-width="2.5"/>
+              <rect x="75" y="60" width="10" height="35" fill="#0f172a" stroke="#00f0ff" stroke-width="1.5"/>
+              <rect x="100" y="60" width="10" height="35" fill="#0f172a" stroke="#00f0ff" stroke-width="1.5"/>
+              <rect x="130" y="60" width="10" height="35" fill="#0f172a" stroke="#00f0ff" stroke-width="1.5"/>
+              <rect x="155" y="60" width="10" height="35" fill="#0f172a" stroke="#00f0ff" stroke-width="1.5"/>
+              <line x1="55" y1="95" x2="185" y2="95" stroke="#ff6b00" stroke-width="2.5"/>
+              <rect x="55" y="95" width="130" height="48" rx="6" fill="#0f172a" stroke="#00f0ff" stroke-width="2.5"/>
+              <rect x="80" y="85" width="16" height="25" rx="3" fill="#1e293b" stroke="#ff6b00" stroke-width="2"/>
+              <circle cx="88" cy="97" r="2.5" fill="#00f0ff"/>
+              <rect x="144" y="85" width="16" height="25" rx="3" fill="#1e293b" stroke="#ff6b00" stroke-width="2"/>
+              <circle cx="152" cy="97" r="2.5" fill="#00f0ff"/>
+              <path d="M 98 60 C 98 46, 142 46, 142 60" stroke="#00f0ff" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <div class="ticker-card-body">
+            <div class="ticker-author-row">
+              <span class="ticker-author-name">👤 Whity</span>
+              <span class="ticker-tag">Aizsargkaste</span>
+            </div>
+            <h3 class="ticker-card-title">Izturīgā Aizsargkaste</h3>
+            <p class="ticker-card-desc">Triecienizturīgs futrālis ar stiprām eņģēm, aizbīdņiem un hermētisku blīvgredzenu.</p>
+            <div class="ticker-card-footer">
+              <span class="ticker-downloads">📥 115k+ lejuplādes</span>
+              <span class="ticker-action-link">Printables ↗</span>
+            </div>
+          </div>
+        </a>
+
+        <!-- Card 7 Dupl -->
+        <a href="https://www.printables.com/model/58428-under-desk-headphone-holder" target="_blank" rel="noopener noreferrer" class="ticker-card" aria-hidden="true" tabindex="-1">
+          <div class="ticker-card-img-wrap">
+            <div class="ticker-badge-top">🎧 Darba Vide</div>
+            <div class="ticker-badge-rating">⭐ 4.8</div>
+            <svg class="preset-vector" viewBox="0 0 240 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="120" cy="90" r="70" fill="url(#glowPhones)"/>
+              <rect x="30" y="32" width="180" height="8" rx="2" fill="#1e293b" stroke="#334155" stroke-width="1.5"/>
+              <rect x="80" y="40" width="75" height="10" rx="2" fill="#0f172a" stroke="#00f0ff" stroke-width="2"/>
+              <circle cx="95" cy="45" r="2.5" fill="#38bdf8"/>
+              <circle cx="140" cy="45" r="2.5" fill="#38bdf8"/>
+              <path d="M 80 50 L 80 115 C 80 125, 95 130, 115 130 L 155 130 L 160 115 L 120 115 C 105 115, 95 110, 95 95 L 95 50 Z" fill="#0f172a" stroke="#00f0ff" stroke-width="2.5" stroke-linejoin="round"/>
+              <path d="M 125 115 C 130 90, 165 90, 170 115" stroke="#ff6b00" stroke-width="3" stroke-linecap="round"/>
+              <rect x="118" y="112" width="12" height="24" rx="5" fill="#1e293b" stroke="#ff6b00" stroke-width="1.8"/>
+              <rect x="165" y="112" width="12" height="24" rx="5" fill="#1e293b" stroke="#ff6b00" stroke-width="1.8"/>
+            </svg>
+          </div>
+          <div class="ticker-card-body">
+            <div class="ticker-author-row">
+              <span class="ticker-author-name">👤 Kopiena</span>
+              <span class="ticker-tag">Zem Galda</span>
+            </div>
+            <h3 class="ticker-card-title">Zemgalda Austiņu Turētājs</h3>
+            <p class="ticker-card-desc">Izturīgs kronšteins montāžai zem galda virsmas. Saudzē austiņu stīpu no deformācijas.</p>
+            <div class="ticker-card-footer">
+              <span class="ticker-downloads">📥 85k+ lejuplādes</span>
+              <span class="ticker-action-link">Printables ↗</span>
+            </div>
+          </div>
+        </a>
+
+        <!-- Card 8 Dupl -->
+        <a href="https://www.printables.com/model/136450-spiral-cable-protector" target="_blank" rel="noopener noreferrer" class="ticker-card" aria-hidden="true" tabindex="-1">
+          <div class="ticker-card-img-wrap">
+            <div class="ticker-badge-top">🔌 Kabeļiem</div>
+            <div class="ticker-badge-rating">⭐ 4.7</div>
+            <svg class="preset-vector" viewBox="0 0 240 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="120" cy="90" r="70" fill="url(#glowCable)"/>
+              <line x1="30" y1="140" x2="210" y2="140" stroke="#1e293b" stroke-width="2" stroke-dasharray="4 4"/>
+              <rect x="50" y="105" width="140" height="30" rx="8" fill="#0f172a" stroke="#00f0ff" stroke-width="2.5"/>
+              <path d="M 72 105 L 72 118 M 98 105 L 98 118 M 124 105 L 124 118 M 150 105 L 150 118 M 176 105 L 176 118" stroke="#00f0ff" stroke-width="2"/>
+              <circle cx="85" cy="115" r="5" fill="#ff6b00"/>
+              <circle cx="111" cy="115" r="5" fill="#38bdf8"/>
+              <circle cx="137" cy="115" r="5" fill="#00e676"/>
+              <circle cx="163" cy="115" r="5" fill="#e2e8f0"/>
+              <path d="M 85 115 C 85 85, 75 70, 75 50" stroke="#ff6b00" stroke-width="3" stroke-linecap="round"/>
+              <path d="M 111 115 C 111 80, 115 65, 115 45" stroke="#38bdf8" stroke-width="3" stroke-linecap="round"/>
+              <path d="M 137 115 C 137 80, 145 65, 145 45" stroke="#00e676" stroke-width="3" stroke-linecap="round"/>
+              <path d="M 163 115 C 163 85, 175 70, 175 50" stroke="#e2e8f0" stroke-width="3" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <div class="ticker-card-body">
+            <div class="ticker-author-row">
+              <span class="ticker-author-name">👤 Kopiena</span>
+              <span class="ticker-tag">Vadu Aizsargs</span>
+            </div>
+            <h3 class="ticker-card-title">Kabeļu Organizatora Modulis</h3>
+            <p class="ticker-card-desc">Galda kabeļu fiksators un spirālveida aizsargs. Novērš vadu pārlocīšanos un nokrišanu.</p>
+            <div class="ticker-card-footer">
+              <span class="ticker-downloads">📥 75k+ lejuplādes</span>
+              <span class="ticker-action-link">Printables ↗</span>
+            </div>
+          </div>
+        </a>
+      </div>
+    </div>
+
+    <!-- Workflow Banner below Ticker -->
+    <div class="container">
+      <div class="ticker-workflow-banner glass-panel">
+        <div class="workflow-info">
+          <h4>
+            <span>💡</span> Kā pasūtīt jebkuru atrasto modeli:
+          </h4>
+          <p>
+            Atrodi bezmaksas modeli Printables vietnē, lejupielādē tā <strong>.STL</strong> failu un iemet mūsu kalkulatorā!
+          </p>
+        </div>
+        <div class="workflow-steps-list">
+          <div class="workflow-step-item">
+            <span class="workflow-step-num">1</span>
+            <span>Lejupielādē .STL</span>
+          </div>
+          <div class="workflow-step-arrow">➔</div>
+          <div class="workflow-step-item">
+            <span class="workflow-step-num">2</span>
+            <span>Ievelc kalkulatorā</span>
+          </div>
+          <div class="workflow-step-arrow">➔</div>
+          <div class="workflow-step-item">
+            <span class="workflow-step-num">3</span>
+            <span>Saņem pakomātā</span>
           </div>
         </div>
+        <a href="#calculator" class="btn btn-primary btn-sm">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="19" x2="12" y2="5"></line><polyline points="5 12 12 5 19 12"></polyline></svg>
+          Augšupielādēt kalkulatorā
+        </a>
       </div>
     </div>
   </section>

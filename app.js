@@ -575,35 +575,37 @@
       recalculatePrice();
     });
 
-    // --- PRESETS CATALOG SELECTION (REAL STL LOADER) ---
+    // --- TRENDING PRINTABLES TICKER STREAM CONTROLLER ---
+    const tickerTrack = document.getElementById("tickerTrack");
+    const tickerPauseBtn = document.getElementById("tickerPauseBtn");
+    const tickerPauseIcon = document.getElementById("tickerPauseIcon");
+    const tickerPauseText = document.getElementById("tickerPauseText");
+
+    if (tickerPauseBtn && tickerTrack) {
+      let isPaused = false;
+      tickerPauseBtn.addEventListener("click", () => {
+        isPaused = !isPaused;
+        if (isPaused) {
+          tickerTrack.classList.add("is-paused");
+          if (tickerPauseIcon) tickerPauseIcon.textContent = "▶";
+          if (tickerPauseText) tickerPauseText.textContent = "Atsākt lentu";
+        } else {
+          tickerTrack.classList.remove("is-paused");
+          if (tickerPauseIcon) tickerPauseIcon.textContent = "⏸";
+          if (tickerPauseText) tickerPauseText.textContent = "Pauzēt lentu";
+        }
+      });
+    }
+
+    // Optional handler for any remaining preset buttons
     document.querySelectorAll(".select-preset-btn").forEach(btn => {
       btn.addEventListener("click", () => {
         const name = btn.dataset.name;
         const modelFile = btn.dataset.model;
-        const mat = btn.dataset.material || "PETG";
-        const infill = parseInt(btn.dataset.infill) || 25;
-
-        // Set material
-        state.material = mat;
-        const targetPill = document.querySelector(`.material-pill input[value="${mat}"]`);
-        if (targetPill) {
-          targetPill.checked = true;
-          document.querySelectorAll(".material-pill").forEach(p => p.classList.remove("selected"));
-          targetPill.closest(".material-pill").classList.add("selected");
-        }
-
-        // Set infill
-        state.infillPercent = infill;
-        DOM.infillSlider.value = infill;
-        DOM.infillValueDisplay.textContent = `${infill}% — Ieteicamais`;
-
-        // Load REAL STL MODEL file!
         if (modelFile) {
           loadPresetSTL(modelFile, `${name}.stl`);
+          document.getElementById("calculator").scrollIntoView({ behavior: "smooth" });
         }
-
-        // Smooth scroll to calculator
-        document.getElementById("calculator").scrollIntoView({ behavior: "smooth" });
       });
     });
 
