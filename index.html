@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="lv">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>3D Druka & Pasūtījumi — Jonyz 3D Lab</title>
+  <meta name="description" content="Profesionāla 3D druka Latvijā. Augšupielādē savu 3D modeli (STL/OBJ), aprēķini cenu reāllaikā un saņem pasūtījumu ar Omniva vai DPD pakomātu.">
+  <meta name="theme-color" content="#090a0f">
+
+  <!-- Open Graph / Social Media -->
+  <meta property="og:title" content="3D Druka & Pasūtījumi — Jonyz 3D Lab">
+  <meta property="og:description" content="Augšupielādē STL failu, apskati modeli reāllaika 3D skatā un saņem tūlītēju cenas aprēķinu. Piegāde visā Latvijā.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://3dprint.jonyz.org">
+
+  <!-- Google Fonts: Outfit & Inter & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+
+  <!-- Three.js CDN -->
+  <script src="https://unpkg.com/three@0.128.0/build/three.min.js"></script>
+  <script src="https://unpkg.com/three@0.128.0/examples/js/loaders/STLLoader.js"></script>
+  <script src="https://unpkg.com/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- Ambient Glow Background -->
+  <div class="bg-orb bg-orb-1"></div>
+  <div class="bg-orb bg-orb-2"></div>
+  <div class="bg-orb bg-orb-3"></div>
+
+  <!-- Header -->
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="#" class="brand-logo">
+        <div class="logo-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+            <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+            <line x1="12" y1="22.08" x2="12" y2="12"></line>
+          </svg>
+        </div>
+        <div class="brand-text">
+          <span class="brand-title">JONYZ <span class="accent-text">3D</span></span>
+          <span class="brand-subtitle">PRINT LAB</span>
+        </div>
+      </a>
+
+      <nav class="nav-menu">
+        <a href="#calculator" class="nav-link">Kalkulators</a>
+        <a href="#models" class="nav-link">Gatavie modeļi</a>
+        <a href="#materials" class="nav-link">Materiāli</a>
+        <a href="#faq" class="nav-link">BUJ</a>
+      </nav>
+
+      <div class="header-status">
+        <span class="status-dot"></span>
+        <span class="status-text">Darbnīca pieņem pasūtījumus</span>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <div class="container hero-container">
+      <div class="hero-badge">
+        <span class="badge-spark">⚡</span> Precīza FDM & Tehniskā 3D Druka
+      </div>
+      <h1 class="hero-title">Pārvērt savu ideju vai <span class="gradient-text">3D modeli</span> taustāmā realitātē</h1>
+      <p class="hero-description">
+        Augšupielādē savu <strong>.STL</strong> failu, apskati modeli reāllaika 3D skatā, izvēlies materiālu un saņem tūlītēju izmaksu aprēķinu dažu sekunžu laikā.
+      </p>
+
+      <div class="hero-actions">
+        <a href="#calculator" class="btn btn-primary btn-glow">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+          Augšupielādēt modeli
+        </a>
+        <a href="#models" class="btn btn-secondary">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
+          Izvēlēties gatavu dizainu
+        </a>
+      </div>
+
+      <!-- Trust Badges -->
+      <div class="trust-grid">
+        <div class="trust-item">
+          <span class="trust-icon">📐</span>
+          <div>
+            <strong>Reāllaika 3D analīze</strong>
+            <span>Gabarīti un apjoma aprēķins</span>
+          </div>
+        </div>
+        <div class="trust-item">
+          <span class="trust-icon">🧪</span>
+          <div>
+            <strong>Industriāli materiāli</strong>
+            <span>PETG, PLA, TPU, ASA</span>
+          </div>
+        </div>
+        <div class="trust-item">
+          <span class="trust-icon">📦</span>
+          <div>
+            <strong>Ātra piegāde</strong>
+            <span>Omniva / DPD pakomātos 1–3 dienās</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3D Studio Configurator Section -->
+  <section id="calculator" class="calculator-section">
+    <div class="container">
+      <div class="section-header text-center">
+        <span class="section-tag">3D KONFIGURATORS</span>
+        <h2 class="section-title">Augšupielādē un konfigurē savu pasūtījumu</h2>
+        <p class="section-sub">Atbalsta standarta <strong>.STL</strong> failus līdz 50MB. Viss aprēķins notiek tieši tavā pārlūkā.</p>
+      </div>
+
+      <div class="studio-grid">
+        <!-- 3D Viewport Card -->
+        <div class="studio-viewport-card glass-panel">
+          <!-- Dropzone -->
+          <div id="dropzone" class="upload-dropzone">
+            <input type="file" id="fileInput" accept=".stl" class="file-input-hidden">
+            <div class="dropzone-inner">
+              <div class="dropzone-icon-wrap">
+                <svg width="44" height="44" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+              </div>
+              <h3 class="dropzone-title">Velc un nomet STL failu šeit</h3>
+              <p class="dropzone-subtitle">vai noklikšķini, lai izvēlētos no sava datora vai telefona</p>
+              <div class="dropzone-actions">
+                <button type="button" id="browseBtn" class="btn btn-outline btn-sm">Izvēlēties failu</button>
+                <button type="button" id="sampleModelBtn" class="btn btn-ghost btn-sm">Izmēģināt testa modeli</button>
+              </div>
+              <span class="dropzone-footnote">Atbalstīts formāts: .stl (ASCII & Binary)</span>
+            </div>
+          </div>
+
+          <!-- 3D Canvas Viewport -->
+          <div id="viewerContainer" class="viewer-container hidden">
+            <canvas id="threeCanvas"></canvas>
+            
+            <!-- Canvas Overlay Controls -->
+            <div class="viewer-overlay-top">
+              <div class="loaded-file-chip">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>
+                <span id="loadedFileName">model.stl</span>
+              </div>
+              <button type="button" id="resetCameraBtn" class="btn-icon" title="Centrēt skatu">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="16"></line><line x1="8" y1="12" x2="16" y2="12"></line></svg>
+              </button>
+              <button type="button" id="wireframeToggleBtn" class="btn-icon" title="Pārslēgt režģa skatu">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
+              </button>
+              <button type="button" id="changeFileBtn" class="btn btn-outline btn-xs">Mainīt failu</button>
+            </div>
+
+            <div class="viewer-overlay-bottom">
+              <span class="canvas-tip">🖱️ Kreisais taustiņš rotācijai | Rullītis mērogam | Labais taustiņš pārbīdei</span>
+            </div>
+          </div>
+
+          <!-- Real-time Model Specs -->
+          <div class="model-metrics-bar">
+            <div class="metric-item">
+              <span class="metric-label">Izmēri (X × Y × Z)</span>
+              <span id="metricDimensions" class="metric-value font-mono">— mm</span>
+            </div>
+            <div class="metric-item">
+              <span class="metric-label">Tilpums</span>
+              <span id="metricVolume" class="metric-value font-mono">— cm³</span>
+            </div>
+            <div class="metric-item">
+              <span class="metric-label">Paredzamais svars</span>
+              <span id="metricWeight" class="metric-value font-mono">— g</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Configuration Card -->
+        <div class="studio-config-card glass-panel">
+          <div class="config-header">
+            <h3>Drukas Parametri</h3>
+            <span class="config-step-badge">Konfigurācija</span>
+          </div>
+
+          <!-- 1. Material Choice -->
+          <div class="form-group">
+            <label class="input-label">1. Materiāla izvēle</label>
+            <div class="material-pills-grid">
+              <label class="material-pill selected">
+                <input type="radio" name="material" value="PETG" checked>
+                <div class="pill-body">
+                  <div class="pill-top">
+                    <span class="pill-name">PETG</span>
+                    <span class="pill-tag recommended">Ieteicams</span>
+                  </div>
+                  <span class="pill-desc">Izturīgs, triecienizturīgs, funkcionālām detaļām</span>
+                </div>
+              </label>
+
+              <label class="material-pill">
+                <input type="radio" name="material" value="PLA">
+                <div class="pill-body">
+                  <div class="pill-top">
+                    <span class="pill-name">PLA</span>
+                    <span class="pill-tag">Detaļām</span>
+                  </div>
+                  <span class="pill-desc">Augsta precizitāte, ideāli prototipiem un figūrām</span>
+                </div>
+              </label>
+
+              <label class="material-pill">
+                <input type="radio" name="material" value="TPU">
+                <div class="pill-body">
+                  <div class="pill-top">
+                    <span class="pill-name">TPU</span>
+                    <span class="pill-tag">Elastīgs</span>
+                  </div>
+                  <span class="pill-desc">Gumijai līdzīgs materiāls, elastīgs un liecams</span>
+                </div>
+              </label>
+
+              <label class="material-pill">
+                <input type="radio" name="material" value="ASA">
+                <div class="pill-body">
+                  <div class="pill-top">
+                    <span class="pill-name">ASA / ABS</span>
+                    <span class="pill-tag">Auto / Āra</span>
+                  </div>
+                  <span class="pill-desc">UV un karstumnoturīgs, ideāls auto saloniem</span>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <!-- 2. Color Selection -->
+          <div class="form-group">
+            <label class="input-label">2. Krāsa</label>
+            <div class="color-options-row">
+              <label class="color-dot-wrap selected" title="Melna (Black)">
+                <input type="radio" name="color" value="Melna" checked>
+                <span class="color-dot" style="background-color: #1a1a1a;"></span>
+                <span class="color-name">Melna</span>
+              </label>
+              <label class="color-dot-wrap" title="Pelēka (Grey)">
+                <input type="radio" name="color" value="Pelēka">
+                <span class="color-dot" style="background-color: #7d8590;"></span>
+                <span class="color-name">Pelēka</span>
+              </label>
+              <label class="color-dot-wrap" title="Balta (White)">
+                <input type="radio" name="color" value="Balta">
+                <span class="color-dot" style="background-color: #f0f3f6;"></span>
+                <span class="color-name">Balta</span>
+              </label>
+              <label class="color-dot-wrap" title="Sarkana (Red)">
+                <input type="radio" name="color" value="Sarkana">
+                <span class="color-dot" style="background-color: #e63946;"></span>
+                <span class="color-name">Sarkana</span>
+              </label>
+              <label class="color-dot-wrap" title="Oranža (Orange)">
+                <input type="radio" name="color" value="Oranža">
+                <span class="color-dot" style="background-color: #ff6b00;"></span>
+                <span class="color-name">Oranža</span>
+              </label>
+              <label class="color-dot-wrap" title="Zila (Blue)">
+                <input type="radio" name="color" value="Zila">
+                <span class="color-dot" style="background-color: #0080ff;"></span>
+                <span class="color-name">Zila</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- 3. Infill Density Slider -->
+          <div class="form-group">
+            <div class="slider-label-row">
+              <label class="input-label">3. Detaļas iekšējais pildījums (Infill)</label>
+              <span id="infillValueDisplay" class="slider-badge">25% — Standarta</span>
+            </div>
+            <input type="range" id="infillSlider" min="10" max="100" step="5" value="25" class="custom-range">
+            <div class="range-ticks">
+              <span>10% (Viegls)</span>
+              <span>25% (Optimāls)</span>
+              <span>50% (Izturīgs)</span>
+              <span>100% (Monolīts)</span>
+            </div>
+          </div>
+
+          <!-- 4. Layer Height / Quality & Quantity -->
+          <div class="form-row-duo">
+            <div class="form-group flex-1">
+              <label class="input-label">4. Slāņa augstums</label>
+              <select id="layerQualitySelect" class="custom-select">
+                <option value="0.28">0.28 mm — Ātrs / Tehniskais</option>
+                <option value="0.20" selected>0.20 mm — Standarts (Optimāls)</option>
+                <option value="0.12">0.12 mm — Ļoti gluds (Detaļām)</option>
+              </select>
+            </div>
+
+            <div class="form-group quantity-box">
+              <label class="input-label">Skaits</label>
+              <div class="qty-counter">
+                <button type="button" id="qtyMinus" class="qty-btn">−</button>
+                <input type="number" id="qtyInput" min="1" max="500" value="1" class="qty-input">
+                <button type="button" id="qtyPlus" class="qty-btn">+</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Live Price Estimation Box -->
+          <div class="price-estimation-card">
+            <div class="price-breakdown">
+              <div class="breakdown-row">
+                <span class="row-label">Materiāls & Drukas laiks:</span>
+                <span id="costBreakdown" class="row-val font-mono">0.00 €</span>
+              </div>
+              <div class="breakdown-row">
+                <span class="row-label">Sagatavošana & kalibrācija:</span>
+                <span id="setupCost" class="row-val font-mono">2.50 €</span>
+              </div>
+              <div class="breakdown-divider"></div>
+              <div class="price-total-row">
+                <div>
+                  <span class="total-label">Kopējā orientējošā cena:</span>
+                  <span class="vat-note">PVN iekļauts | Precīza apstiprināšana 1h laikā</span>
+                </div>
+                <div class="total-price-wrap">
+                  <span id="totalPriceDisplay" class="total-price font-mono">0.00 €</span>
+                </div>
+              </div>
+            </div>
+
+            <button type="button" id="proceedOrderBtn" class="btn btn-primary btn-block btn-lg btn-glow">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+              Noformēt pasūtījumu
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Popular Ready-to-Print Models Catalog -->
+  <section id="models" class="models-section">
+    <div class="container">
+      <div class="section-header text-center">
+        <span class="section-tag">GATAVIE DIZAINI</span>
+        <h2 class="section-title">Populārākie 3D modeļi no Printables</h2>
+        <p class="section-sub">Nav sava STL faila? Izvēlies kādu no pārbaudītajiem dizainiem ar vienu klikšķi!</p>
+      </div>
+
+      <div class="preset-grid">
+        <!-- Preset 1: Articulated Dragon -->
+        <div class="preset-card glass-panel">
+          <div class="preset-img-wrap">
+            <div class="preset-badge">Printables #1</div>
+            <img src="https://media.printables.com/media/prints/152592/images/1446700_7c0efad5-a75d-4f1d-b501-523c14c8d5a2/thumbs/cover/640x480/jpg/dragon-5.webp" alt="Flexi Print-In-Place Dragon" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1615715616181-6789bfa50f8c?w=600&auto=format&fit=crop&q=80'">
+          </div>
+          <div class="preset-content">
+            <h3 class="preset-title">Flexi Articulated Dragon</h3>
+            <p class="preset-desc">Print-in-place kustīgais pūķis. Visi posmi kustas brīvi bez montāžas.</p>
+            <div class="preset-specs font-mono">
+              <span>📐 ~180×60×35 mm</span>
+              <span>🧪 PETG / PLA</span>
+            </div>
+            <button type="button" class="btn btn-outline btn-block select-preset-btn"
+              data-name="Flexi Articulated Dragon"
+              data-x="180" data-y="60" data-z="35"
+              data-volume="48.5"
+              data-material="PLA"
+              data-infill="20">
+              ⚡ Izvēlēties šo modeli
+            </button>
+          </div>
+        </div>
+
+        <!-- Preset 2: Ergonomic Phone Stand -->
+        <div class="preset-card glass-panel">
+          <div class="preset-img-wrap">
+            <div class="preset-badge">Praktisks</div>
+            <img src="https://media.printables.com/media/prints/300431/images/2637996_59ce8772-e14b-4809-b68e-a2267605d32c/thumbs/cover/640x480/jpg/render-1.webp" alt="Ergonomisks Telefona Statīvs" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1586105251261-72a756497a11?w=600&auto=format&fit=crop&q=80'">
+          </div>
+          <div class="preset-content">
+            <h3 class="preset-title">Ergonomisks Telefona Statīvs</h3>
+            <p class="preset-desc">Stabils galda statīvs viedtālrunim ar kabelim paredzētu gropi uzlādei.</p>
+            <div class="preset-specs font-mono">
+              <span>📐 ~75×85×90 mm</span>
+              <span>🧪 PETG</span>
+            </div>
+            <button type="button" class="btn btn-outline btn-block select-preset-btn"
+              data-name="Ergonomisks Telefona Statīvs"
+              data-x="75" data-y="85" data-z="90"
+              data-volume="38.0"
+              data-material="PETG"
+              data-infill="30">
+              ⚡ Izvēlēties šo modeli
+            </button>
+          </div>
+        </div>
+
+        <!-- Preset 3: Under-desk Headphone Holder -->
+        <div class="preset-card glass-panel">
+          <div class="preset-img-wrap">
+            <div class="preset-badge">Darba galdam</div>
+            <img src="https://media.printables.com/media/prints/53417/images/542562_a4e8dbe8-7fa4-4061-8255-0816b3f9ff93/thumbs/cover/640x480/jpg/img_20201202_191947.webp" alt="Austiņu Turētājs" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1546435770-a3e426bf472b?w=600&auto=format&fit=crop&q=80'">
+          </div>
+          <div class="preset-content">
+            <h3 class="preset-title">Zemgalda Austiņu Turētājs</h3>
+            <p class="preset-desc">Stingrs stiprinājums zem galda virsmas austiņu ērtai glabāšanai.</p>
+            <div class="preset-specs font-mono">
+              <span>📐 ~100×45×65 mm</span>
+              <span>🧪 PETG</span>
+            </div>
+            <button type="button" class="btn btn-outline btn-block select-preset-btn"
+              data-name="Zemgalda Austiņu Turētājs"
+              data-x="100" data-y="45" data-z="65"
+              data-volume="42.0"
+              data-material="PETG"
+              data-infill="40">
+              ⚡ Izvēlēties šo modeli
+            </button>
+          </div>
+        </div>
+
+        <!-- Preset 4: 3D Benchy -->
+        <div class="preset-card glass-panel">
+          <div class="preset-img-wrap">
+            <div class="preset-badge">Klasika</div>
+            <img src="https://media.printables.com/media/prints/3161/images/33055_f3c83789-9a25-4fe0-8636-1e967a147d3d/thumbs/cover/640x480/jpg/3dbenchy_color_3.webp" alt="3D Benchy Kuģītis" loading="lazy" onerror="this.src='https://images.unsplash.com/photo-1581092160607-ee22621dd758?w=600&auto=format&fit=crop&q=80'">
+          </div>
+          <div class="preset-content">
+            <h3 class="preset-title">3D Benchy Kalibrācijas Kuģītis</h3>
+            <p class="preset-desc">Pasaulē populārākais 3D drukas etalons un suvenīrs kvalitātes pārbaudei.</p>
+            <div class="preset-specs font-mono">
+              <span>📐 ~60×31×48 mm</span>
+              <span>🧪 PLA / PETG</span>
+            </div>
+            <button type="button" class="btn btn-outline btn-block select-preset-btn"
+              data-name="3D Benchy Kuģītis"
+              data-x="60" data-y="31" data-z="48"
+              data-volume="15.5"
+              data-material="PLA"
+              data-infill="15">
+              ⚡ Izvēlēties šo modeli
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Materials Guide Section -->
+  <section id="materials" class="materials-section">
+    <div class="container">
+      <div class="section-header text-center">
+        <span class="section-tag">MATERIĀLU GIDS</span>
+        <h2 class="section-title">Kādu materiālu izvēlēties tavam projektam?</h2>
+        <p class="section-sub">Katram materiālam ir savs pielietojums un mehāniskās īpašības.</p>
+      </div>
+
+      <div class="materials-grid">
+        <div class="mat-card glass-panel">
+          <div class="mat-card-header">
+            <span class="mat-badge">Populārākais</span>
+            <h3>PETG</h3>
+          </div>
+          <p class="mat-summary">Polietilēntereftalāts ar glikolu — optimālākā izvēle funkcionālām detaļām.</p>
+          <ul class="mat-features">
+            <li>✅ Augsta triecienizturība un elastība</li>
+            <li>✅ Ūdens un ķīmisko vielu izturība</li>
+            <li>✅ Karstumizturība līdz ~75°C</li>
+            <li>💡 Pielietojums: Kronšteini, mehānismi, korpusi</li>
+          </ul>
+        </div>
+
+        <div class="mat-card glass-panel">
+          <div class="mat-card-header">
+            <span class="mat-badge">Precīzākais</span>
+            <h3>PLA</h3>
+          </div>
+          <p class="mat-summary">Videi draudzīgs kukurūzas cietes polimērs ar visgludāko virsmu.</p>
+          <ul class="mat-features">
+            <li>✅ Maksimāla detaļu precizitāte un gludums</li>
+            <li>✅ Stingrs un ciets materiāls</li>
+            <li>⚠️ Zema karstumizturība (līdz ~55°C)</li>
+            <li>💡 Pielietojums: Prototipi, figūras, mājas dekori</li>
+          </ul>
+        </div>
+
+        <div class="mat-card glass-panel">
+          <div class="mat-card-header">
+            <span class="mat-badge">Elastīgs</span>
+            <h3>TPU (95A)</h3>
+          </div>
+          <p class="mat-summary">Termoplastiskais poliuretāns — elastīgs kā cieta gumija.</p>
+          <ul class="mat-features">
+            <li>✅ Var locīt, spiest un vērpt bez lūzuma</li>
+            <li>✅ Teicama nodilumizturība un triecienu absorbcija</li>
+            <li>✅ Izturīgs pret eļļām un taukiem</li>
+            <li>💡 Pielietojums: Blīves, amortizatori, vāciņi, kājiņas</li>
+          </ul>
+        </div>
+
+        <div class="mat-card glass-panel">
+          <div class="mat-card-header">
+            <span class="mat-badge">Auto & Āra</span>
+            <h3>ASA</h3>
+          </div>
+          <p class="mat-summary">Uzlabots ABS analogs ar maksimālu izturību pret saules stariem un karstumu.</p>
+          <ul class="mat-features">
+            <li>✅ 100% UV un laika apstākļu noturīgs</li>
+            <li>✅ Karstumizturība virs 95°C</li>
+            <li>✅ Piemērots detaļām zem motora pārsega</li>
+            <li>💡 Pielietojums: Auto detaļas, ārējie sensori, drona rāmji</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ Section -->
+  <section id="faq" class="faq-section">
+    <div class="container max-w-800">
+      <div class="section-header text-center">
+        <span class="section-tag">BIEŽĀK UZDOTIE JAUTĀJUMI</span>
+        <h2 class="section-title">Viss par pasūtīšanu un izgatavošanu</h2>
+      </div>
+
+      <div class="faq-accordion">
+        <details class="faq-item glass-panel" open>
+          <summary class="faq-question">Cik ātri pasūtījums tiks izgatavots?</summary>
+          <div class="faq-answer">
+            Standarta pasūtījumi tiek izgatavoti <strong>24–48 stundu laikā</strong> no apstiprināšanas brīža. Ja modelis ir apjomīgs vai sastāv no vairākām detaļām, mēs e-pastā saskaņosim precīzu izpildes termiņu.
+          </div>
+        </details>
+
+        <details class="faq-item glass-panel">
+          <summary class="faq-question">Kā notiek piegāde un samaksa?</summary>
+          <div class="faq-answer">
+            Piegādi nodrošinām ar <strong>Omniva</strong> vai <strong>DPD</strong> pakomātiem visā Latvijā (parasti 1–2 darba dienu laikā pēc izgatavošanas). Pēc pasūtījuma saņemšanas mēs nosūtām rēķinu uz jūsu norādīto e-pastu.
+          </div>
+        </details>
+
+        <details class="faq-item glass-panel">
+          <summary class="faq-question">Ko darīt, ja man ir tikai rasējums vai salūzusi detaļa, bet nav 3D faila?</summary>
+          <div class="faq-answer">
+            Nav problēmu! Uzraksti mums uz <a href="mailto:autosargs@gmail.com" class="accent-link">autosargs@gmail.com</a> ar fotoattēlu un izmēriem — piedāvājam arī 3D modelēšanas pakalpojumus pēc jūsu parauga.
+          </div>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- Order Checkout Modal -->
+  <div id="orderModal" class="modal-backdrop hidden">
+    <div class="modal-card glass-panel">
+      <div class="modal-header">
+        <div>
+          <h3 class="modal-title">Pasūtījuma Noformēšana</h3>
+          <p class="modal-sub">Dati tiks nosūtīti uz mūsu e-pastu apstiprināšanai.</p>
+        </div>
+        <button type="button" id="closeModalBtn" class="modal-close-btn">&times;</button>
+      </div>
+
+      <div class="modal-body">
+        <!-- Order Summary Brief -->
+        <div class="modal-order-summary">
+          <div class="summary-chip">
+            <span class="chip-label">Fails / Modelis:</span>
+            <span id="modalFileName" class="chip-val font-mono">—</span>
+          </div>
+          <div class="summary-chip">
+            <span class="chip-label">Materiāls & Krāsa:</span>
+            <span id="modalMaterialInfo" class="chip-val font-mono">—</span>
+          </div>
+          <div class="summary-chip">
+            <span class="chip-label">Pildījums & Slānis:</span>
+            <span id="modalQualityInfo" class="chip-val font-mono">—</span>
+          </div>
+          <div class="summary-chip">
+            <span class="chip-label">Kopējā summa:</span>
+            <span id="modalTotalPrice" class="chip-val font-mono accent-text">0.00 €</span>
+          </div>
+        </div>
+
+        <!-- Order Form -->
+        <form id="orderSubmitForm" class="order-form">
+          <input type="hidden" name="to_email" value="autosargs@gmail.com">
+          <input type="hidden" name="subject" value="Jauns 3D Drukas Pasūtījums no 3dprint.jonyz.org">
+          <input type="hidden" id="formOrderDetails" name="order_details" value="">
+
+          <div class="form-row-duo">
+            <div class="form-group">
+              <label class="input-label" for="clientName">Vārds, Uzvārds *</label>
+              <input type="text" id="clientName" name="name" required placeholder="Jānis Bērziņš" class="custom-input">
+            </div>
+            <div class="form-group">
+              <label class="input-label" for="clientPhone">Tālrunis *</label>
+              <input type="tel" id="clientPhone" name="phone" required placeholder="+371 20000000" class="custom-input">
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="input-label" for="clientEmail">E-pasts saziņai & rēķinam *</label>
+            <input type="email" id="clientEmail" name="email" required placeholder="janis@epasts.lv" class="custom-input">
+          </div>
+
+          <div class="form-group">
+            <label class="input-label">Piegādes veids *</label>
+            <div class="delivery-radio-group">
+              <label class="delivery-radio selected">
+                <input type="radio" name="delivery" value="Omniva (+3.50 €)" checked>
+                <span>📦 Omniva Pakomāts (+3.50 €)</span>
+              </label>
+              <label class="delivery-radio">
+                <input type="radio" name="delivery" value="DPD (+3.50 €)">
+                <span>📦 DPD Pakomāts (+3.50 €)</span>
+              </label>
+              <label class="delivery-radio">
+                <input type="radio" name="delivery" value="Uz vietas (Bezmaksas)">
+                <span>🏢 Saņemšana uz vietas (Bezmaksas)</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="input-label" for="clientDeliveryAddress">Vēlamais pakomāts vai adrese *</label>
+            <input type="text" id="clientDeliveryAddress" name="delivery_address" required placeholder="Piem., Rīgas TC Mols Omniva pakomāts" class="custom-input">
+          </div>
+
+          <div class="form-group">
+            <label class="input-label" for="clientNotes">Komentāri vai īpašas prasības</label>
+            <textarea id="clientNotes" name="notes" rows="2" placeholder="Papildu vēlmes, vītņu ieliktņi, virsmas prasības..." class="custom-textarea"></textarea>
+          </div>
+
+          <!-- Status message container -->
+          <div id="formStatusMsg" class="form-status-msg hidden"></div>
+
+          <div class="modal-actions">
+            <button type="button" id="cancelModalBtn" class="btn btn-secondary">Atcelt</button>
+            <button type="submit" id="submitOrderBtn" class="btn btn-primary btn-glow">
+              <span>Nosūtīt pasūtījumu</span>
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Success Modal -->
+  <div id="successModal" class="modal-backdrop hidden">
+    <div class="modal-card glass-panel text-center">
+      <div class="success-icon-wrap">
+        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+      </div>
+      <h3 class="modal-title">Pasūtījums veiksmīgi nosūtīts!</h3>
+      <p class="modal-sub">
+        Paldies! Pasūtījuma kopsavilkums ir nosūtīts uz darbnīcas e-pastu <strong>autosargs@gmail.com</strong>.
+      </p>
+      <div class="success-details-card font-mono">
+        <p>Pasūtījuma ID: <strong id="successOrderId" class="accent-text">#3D-0000</strong></p>
+        <p>Mēs sazināsimies ar jums 1h laikā, lai apstiprinātu izgatavošanas grafiku.</p>
+      </div>
+      <button type="button" id="successDoneBtn" class="btn btn-primary btn-block">Lieliski!</button>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div class="footer-brand">
+        <span class="brand-title">JONYZ <span class="accent-text">3D</span> PRINT LAB</span>
+        <p class="footer-note">Augstas kvalitātes FDM 3D drukas pakalpojumi prototipiem un sērijveida detaļām.</p>
+      </div>
+      <div class="footer-contact">
+        <span>E-pasts saziņai: <a href="mailto:autosargs@gmail.com" class="accent-link">autosargs@gmail.com</a></span>
+        <span>Vietne: <a href="https://3dprint.jonyz.org" class="accent-link">3dprint.jonyz.org</a></span>
+      </div>
+      <div class="footer-copy">
+        &copy; 2026 Jonyz 3D Print Lab. Visas tiesības aizsargātas. Izvietots uz Cloudflare Pages.
+      </div>
+    </div>
+  </footer>
+
+  <!-- Application Logic -->
+  <script src="app.js"></script>
+</body>
+</html>
