@@ -736,7 +736,7 @@ Piegādes veids: ${state.delivery}
       const formData = new FormData();
       formData.append("access_key", "c06efad5-3dprint-jonyz-lab");
       formData.append("subject", `[3D Pasūtījums ${orderId}] No: ${clientName} (${payload.total_price})`);
-      formData.append("from_name", "3dprint.jonyz.org");
+      formData.append("from_name", "3dlab.jonyz.org");
       formData.append("to_email", "autosargs@gmail.com");
       formData.append("message", JSON.stringify(payload, null, 2));
 
@@ -758,7 +758,7 @@ Piegādes veids: ${state.delivery}
       // If direct form fails or in offline dev, open mailto intent
       if (!sentSuccessfully) {
         const mailSubject = encodeURIComponent(`Jauns 3D Pasūtījums ${orderId} - ${clientName}`);
-        const mailBody = encodeURIComponent(`Sveiki!\n\nNosūtu 3D drukas pasūtījumu:\n\nPasūtījuma ID: ${orderId}\nKlients: ${clientName}\nTālrunis: ${clientPhone}\nE-pasts: ${clientEmail}\nPiegāde: ${state.delivery} (${clientAddress})\n\nModelis: ${state.fileName}\nIzmēri: ${payload.dimensions}\nSvars: ${payload.weight}\nMateriāls: ${state.material} (${state.colorName})\nPildījums: ${state.infill}\nSlānis: ${state.layer_height}\nSkaits: ${state.quantity} gab.\nKopējā summa: ${payload.total_price}\n\nKomentāri:\n${clientNotes || "Nav"}\n\n---\nNosūtīts no 3dprint.jonyz.org`);
+        const mailBody = encodeURIComponent(`Sveiki!\n\nNosūtu 3D drukas pasūtījumu:\n\nPasūtījuma ID: ${orderId}\nKlients: ${clientName}\nTālrunis: ${clientPhone}\nE-pasts: ${clientEmail}\nPiegāde: ${state.delivery} (${clientAddress})\n\nModelis: ${state.fileName}\nIzmēri: ${payload.dimensions}\nSvars: ${payload.weight}\nMateriāls: ${state.material} (${state.colorName})\nPildījums: ${state.infill}\nSlānis: ${state.layer_height}\nSkaits: ${state.quantity} gab.\nKopējā summa: ${payload.total_price}\n\nKomentāri:\n${clientNotes || "Nav"}\n\n---\nNosūtīts no 3dlab.jonyz.org`);
         
         window.open(`mailto:autosargs@gmail.com?subject=${mailSubject}&body=${mailBody}`, "_blank");
       }

@@ -1,4 +1,4 @@
-# Jonyz 3D Print Lab (3dprint.jonyz.org)
+# Jonyz 3D Print Lab (3dlab.jonyz.org)
 
 Mūsdienīga, ātra un uzticama 3D drukas pasūtījumu un cenas aprēķina platforma, kas radīta izvietošanai uz **Cloudflare Pages** (bezmaksas hostings ar neierobežotu trafiku).
 
@@ -9,7 +9,7 @@ Mūsdienīga, ātra un uzticama 3D drukas pasūtījumu un cenas aprēķina platf
    - Pārlūkā tiek renderēts 3D modelis ar apgaismojumu uz virtuālās drukas pamatnes (250x250mm).
    - Atbalsta rotāciju, mērogošanu, centrēšanu un karkasa (wireframe) režīmu.
 2. **Reāllaika ģeometrijas analīze:**
-   - Aprēķina precīzus modeļa gabarītus ($X 	imes Y 	imes Z$ mm).
+   - Aprēķina precīzus modeļa gabarītus ($X \times Y \times Z$ mm).
    - Aprēķina precīzu tīro tilpumu ($cm^3$) ar trijstūru tetraedru metodi.
    - Aprēķina paredzamo svaru gramos atkarībā no izvēlētā materiāla blīvuma un pildījuma (Infill).
 3. **Materiālu un drukas konfigurators:**
@@ -20,31 +20,26 @@ Mūsdienīga, ātra un uzticama 3D drukas pasūtījumu un cenas aprēķina platf
    - Detaļu skaita reizinātājs.
 4. **Cenu kalkulators:**
    - Pārskatāma cenu struktūra (Materiāls + Mašīnlaiks + Sagatavošana).
-5. **Printables gatavo dizainu katalogs:**
-   - Populārie modeļi (Flexi Dragon, Telefona statīvs, Austiņu turētājs, Benchy).
+5. **Printables gatavo dizainu lente:**
+   - Populārie modeļi (Benchy, Dummy 13, Honeycomb wall, Austiņu turētājs, Gridfinity, Rugged box, u.c.).
 6. **Pasūtījumu noformēšana:**
    - Piegādes izvēle: Omniva / DPD pakomāts vai saņemšana uz vietas.
    - Visi pasūtījuma dati un konfigurācija tiek nosūtīti uz e-pastu: **autosargs@gmail.com**.
 
 ---
 
-## 🌐 Kā izvietot uz Cloudflare Pages (3dprint.jonyz.org)
+## 🌐 Kā izvietot uz Cloudflare Pages (3dlab.jonyz.org)
 
-### 1. Variants: Caur GitHub (Visērtākais)
-1. Izveido jaunu privātu vai publisku repozitoriju savā GitHub kontā (piem., `3dprint`).
-2. Šajā mapē palaid:
-   ```bash
-   git add .
-   git commit -m "Initial commit of 3D Print Lab"
-   git remote add origin https://github.com/<tavs-lietotajs>/3dprint.git
-   git push -u origin main
-   ```
-3. Ieej **[dash.cloudflare.com](https://dash.cloudflare.com/)** -> **Workers & Pages** -> **Create application** -> **Pages** -> **Connect to Git**.
-4. Izvēlies `3dprint` repozitoriju:
+### Caur GitHub (Pieslēgts)
+Repozitorijs: **`https://github.com/autosargs-create/3dprint`**
+
+1. Ieej **[dash.cloudflare.com](https://dash.cloudflare.com/)** -> **Workers & Pages** -> **Create application** -> **Pages** -> **Connect to Git**.
+2. Izvēlies repozitoriju `autosargs-create/3dprint`:
+   - Production branch: `master`
    - Framework preset: *None*
    - Build output directory: `.` (vai atstāj tukšu).
-5. Noklikšķini **Save and Deploy**.
-6. Sadaļā **Custom domains** pievieno `3dprint.jonyz.org`!
+3. Noklikšķini **Save and Deploy**.
+4. Sadaļā **Custom domains** pievieno `3dlab.jonyz.org`!
 
 ---
 
