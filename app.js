@@ -314,6 +314,18 @@
     recalculatePrice();
   }
 
+  function setFormAttachment(file) {
+    try {
+      const input = document.getElementById("formAttachmentInput");
+      if (!input || !file) return;
+      const dt = new DataTransfer();
+      dt.items.add(file);
+      input.files = dt.files;
+    } catch (err) {
+      console.warn("Could not set file input via DataTransfer:", err);
+    }
+  }
+
   // Load Real STL from Server / Static Folder
   function loadPresetSTL(modelPath, modelName) {
     initThree();
@@ -323,12 +335,15 @@
 
     state.fileName = modelName;
     state.isPreset = true;
+    state.presetPath = modelPath;
 
     // Cache as File blob so it gets attached to the order email
     fetch(modelPath)
       .then(res => res.blob())
       .then(blob => {
-        state.file = new File([blob], modelName, { type: "model/stl" });
+        const file = new File([blob], modelName, { type: "application/octet-stream" });
+        state.file = file;
+        setFormAttachment(file);
       })
       .catch(e => console.warn("Could not cache preset blob:", e));
 
@@ -432,7 +447,9 @@
     }
 
     state.file = file;
+    state.fileName = fileName;
     state.isPreset = false;
+    setFormAttachment(file);
 
     const reader = new FileReader();
     reader.onload = function(e) {
@@ -690,7 +707,10 @@ Bāzes cena: ${state.priceCalculated.totalPrice.toFixed(2)} €
 Piegādes veids: ${state.delivery}
 ==================================
 `;
-    document.getElementById("formOrderDetails").value = summaryText.trim();
+    const formDetailsEl = document.getElementById("formOrderDetails");
+    if (formDetailsEl) {
+      formDetailsEl.value = summaryText.trim();
+    }
 
     DOM.formStatusMsg.classList.add("hidden");
     DOM.orderModal.classList.remove("hidden");
@@ -760,13 +780,31 @@ Piegādes veids: ${state.delivery}
       formData.append("Pasūtījuma laiks", timestamp);
       formData.append("Vietne", "https://3dlab.jonyz.org");
 
+      // If preset file hasn't finished caching yet, fetch it now
+      if (!state.file && state.isPreset && state.presetPath) {
+        try {
+          const res = await fetch(state.presetPath);
+          const blob = await res.blob();
+          state.file = new File([blob], state.fileName, { type: "application/octet-stream" });
+          setFormAttachment(state.file);
+        } catch (e) {
+          console.warn("Could not fetch preset file for attachment:", e);
+        }
+      }
+
       // Attach the actual STL file directly to the email
       if (state.file) {
         if (state.file.size <= 9.5 * 1024 * 1024) {
-          formData.append("attachment", state.file, state.fileName);
+          let uploadFile = state.file;
+          if (!uploadFile.type || uploadFile.type === "") {
+            uploadFile = new File([state.file], state.fileName, { type: "application/octet-stream" });
+          }
+          formData.append("attachment", uploadFile, state.fileName);
         } else {
           formData.append("Pielikuma statuss", `Fails pārsniedz 10 MB limitu (${(state.file.size / (1024 * 1024)).toFixed(1)} MB). Lūgums pieprasīt klientam atsevišķi.`);
         }
+      } else {
+        formData.append("Pielikuma statuss", "Fails netika pievienots.");
       }
 
       // If opened as local file (file://), notify and provide instant mailto
