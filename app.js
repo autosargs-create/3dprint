@@ -34,7 +34,7 @@
   };
 
   const BASE_SETUP_FEE = 2.50; // EUR
-  const MIN_ORDER_TOTAL = 5.00; // EUR
+  const MIN_ORDER_TOTAL = 3.00; // EUR
   const MACHINE_HOUR_RATE = 1.60; // EUR/hr approx
 
   // --- APPLICATION STATE ---
@@ -387,7 +387,9 @@
     const qualityFactor = LAYER_TIME_FACTORS[state.layerHeight] || 1.0;
 
     // Estimated print time (e.g. approx 16-18g/hr on standard coreXY)
-    const hoursPerPiece = Math.max(0.4, (singleWeightGrams / 18.0) * qualityFactor);
+    const hoursPerPiece = state.rawVolumeCm3 > 0 
+      ? Math.max(0.2, (singleWeightGrams / 18.0) * qualityFactor) 
+      : 0;
     const totalHours = hoursPerPiece * state.quantity;
 
     // Costs
