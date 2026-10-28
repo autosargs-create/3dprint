@@ -821,10 +821,10 @@ Piegādes veids: ${state.delivery}
         }
       }
 
-      // Check file size limit (10MB)
-      if (state.file && state.file.size > 10 * 1024 * 1024) {
+      // Check file size limit for Telegram (45MB)
+      if (state.file && state.file.size > 45 * 1024 * 1024) {
         const sizeMb = (state.file.size / (1024 * 1024)).toFixed(1);
-        const proceed = confirm(`Modeļa fails ir ${sizeMb} MB (e-pasta limits ir 10 MB). Pasūtījums tiks nosūtīts, bet failu lūgsim nosūtīt atsevišķi. Vai turpināt?`);
+        const proceed = confirm(`Modeļa fails ir ${sizeMb} MB (maksimālais ielādes limits ir 45 MB). Vai vēlaties turpināt nosūtīt pasūtījumu?`);
         if (!proceed) {
           DOM.submitOrderBtn.disabled = false;
           DOM.submitOrderBtn.innerHTML = `<span>Nosūtīt pasūtījumu</span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>`;
@@ -832,42 +832,52 @@ Piegādes veids: ${state.delivery}
         }
       }
 
-      // Populate hidden fields in the form
-      setHiddenField(form, "_subject", `[3D Pasūtījums ${orderId}] ${clientName} (${totalPrice})`);
-      setHiddenField(form, "_replyto", clientEmail);
-      setHiddenField(form, "_template", "table");
-      setHiddenField(form, "_captcha", "false");
-      const nextUrl = `${window.location.origin}${window.location.pathname}?order=success&id=${encodeURIComponent(orderId)}`;
-      setHiddenField(form, "_next", nextUrl);
+      // Build FormData payload
+      const orderFormData = new FormData();
+      orderFormData.append("order_id", orderId);
+      orderFormData.append("client_name", clientName);
+      orderFormData.append("client_phone", clientPhone);
+      orderFormData.append("client_email", clientEmail);
+      orderFormData.append("delivery", state.delivery);
+      orderFormData.append("delivery_address", clientAddress);
+      orderFormData.append("notes", clientNotes || "Nav norādīti");
 
-      setHiddenField(form, "Pasūtījuma ID", orderId);
-      setHiddenField(form, "Klients", clientName);
-      setHiddenField(form, "Tālrunis", clientPhone);
-      setHiddenField(form, "E-pasts", clientEmail);
-      setHiddenField(form, "Piegādes veids", state.delivery);
-      setHiddenField(form, "Piegādes adrese", clientAddress);
-      setHiddenField(form, "3D Modelis", state.fileName);
-      setHiddenField(form, "Izmēri (X × Y × Z)", `${state.dimensions.x} × ${state.dimensions.y} × ${state.dimensions.z} mm`);
-      setHiddenField(form, "Detaļas svars", `${weightGrams} g`);
-      setHiddenField(form, "Tīrais tilpums", `${state.rawVolumeCm3.toFixed(1)} cm³`);
-      setHiddenField(form, "Materiāls", `${state.material} (${state.colorName})`);
-      setHiddenField(form, "Pildījums (Infill)", `${state.infillPercent}%`);
-      setHiddenField(form, "Slāņa biezums", `${state.layerHeight} mm`);
-      setHiddenField(form, "Detaļu skaits", `${state.quantity} gab.`);
-      setHiddenField(form, "Materiāla izmaksas", `${matCost} €`);
-      setHiddenField(form, "Drukas laiks", `~${priceInfo.printTimeHours || 1} h (${printCost} €)`);
-      setHiddenField(form, "Sagatavošana", `${setupCost} €`);
-      setHiddenField(form, "Piegāde", state.delivery);
-      setHiddenField(form, "KOPĒJĀ SUMMA", totalPrice);
-      setHiddenField(form, "Klienta piezīmes", clientNotes || "Nav norādīti");
-      setHiddenField(form, "Pasūtījuma laiks", timestamp);
-      setHiddenField(form, "Vietne", "https://3dlab.jonyz.org");
+      orderFormData.append("model_name", state.fileName || "model.stl");
+      orderFormData.append("dimensions", `${state.dimensions.x} × ${state.dimensions.y} × ${state.dimensions.z} mm`);
+      orderFormData.append("weight", `${weightGrams} g`);
+      orderFormData.append("volume", `${state.rawVolumeCm3.toFixed(1)} cm³`);
+      orderFormData.append("material", `${state.material} (${state.colorName})`);
+      orderFormData.append("infill", `${state.infillPercent}%`);
+      orderFormData.append("layer_height", `${state.layerHeight} mm`);
+      orderFormData.append("quantity", `${state.quantity} gab.`);
+      orderFormData.append("total_price", totalPrice);
+      orderFormData.append("order_time", timestamp);
 
-      // Prepare file attachment input
-      prepareFormAttachment();
+      if (state.file) {
+        orderFormData.append("attachment", state.file, state.fileName || "model.stl");
+      }
 
-      // Submit form natively to FormSubmit
-      HTMLFormElement.prototype.submit.call(form);
+      // Submit via Cloudflare Pages Function -> Telegram
+      const response = await fetch("/api/order", {
+        method: "POST",
+        body: orderFormData
+      });
+
+      const result = await response.json().catch(() => ({}));
+
+      if (!response.ok || !result.success) {
+        throw new Error(result.message || "Neizdevās nosūtīt pasūtījumu uz serveri");
+      }
+
+      // Order successfully submitted!
+      DOM.orderModal.classList.add("hidden");
+      if (DOM.successOrderId) {
+        DOM.successOrderId.textContent = orderId;
+      }
+      if (DOM.successModal) {
+        DOM.successModal.classList.remove("hidden");
+      }
+      form.reset();
 
     } catch (err) {
       console.error("Order submission failed:", err);
