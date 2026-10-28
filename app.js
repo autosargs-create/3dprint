@@ -44,6 +44,7 @@
     isPreset: false,
     dimensions: { x: 0, y: 0, z: 0 },
     rawVolumeCm3: 0,
+    surfaceAreaCm2: 0,
     material: "PETG",
     colorName: "Melna",
     infillPercent: 25,
@@ -218,20 +219,26 @@
   // =========================================================================
   // 2. MESH VOLUME & GEOMETRY CALCULATIONS
   // =========================================================================
-  function calculateMeshVolume(geometry) {
+  // 2. 3D MESH VOLUME & SURFACE AREA CALCULATION
+  // =========================================================================
+  function calculateMeshVolumeAndArea(geometry) {
     let position = geometry.attributes.position;
     let faces = position.count / 3;
     let signedVolumeSum = 0;
+    let surfaceAreaSum = 0;
 
     const p1 = new THREE.Vector3();
     const p2 = new THREE.Vector3();
     const p3 = new THREE.Vector3();
+    const cb = new THREE.Vector3();
+    const ab = new THREE.Vector3();
 
     for (let i = 0; i < faces; i++) {
       p1.fromBufferAttribute(position, i * 3 + 0);
       p2.fromBufferAttribute(position, i * 3 + 1);
       p3.fromBufferAttribute(position, i * 3 + 2);
 
+      // Signed volume of tetrahedron formed with origin
       signedVolumeSum += (
         -p3.x * p2.y * p1.z +
          p2.x * p3.y * p1.z +
@@ -240,10 +247,20 @@
          p2.x * p1.y * p3.z +
          p1.x * p2.y * p3.z
       ) / 6.0;
+
+      // Triangle surface area: 0.5 * |(p3 - p1) x (p2 - p1)|
+      cb.subVectors(p3, p1);
+      ab.subVectors(p2, p1);
+      cb.cross(ab);
+      surfaceAreaSum += cb.length() * 0.5;
     }
 
     const volumeCm3 = Math.abs(signedVolumeSum) / 1000.0;
-    return volumeCm3 > 0.01 ? volumeCm3 : 1.0;
+    const areaCm2 = surfaceAreaSum / 100.0;
+    return {
+      volumeCm3: volumeCm3 > 0.01 ? volumeCm3 : 1.0,
+      areaCm2: areaCm2 > 0.01 ? areaCm2 : 1.0
+    };
   }
 
   // =========================================================================
@@ -289,12 +306,13 @@
     currentMesh.receiveShadow = true;
     scene.add(currentMesh);
 
-    // Volume & specs calculation
-    const volumeCm3 = calculateMeshVolume(geometry);
+    // Volume & surface area calculation
+    const metrics = calculateMeshVolumeAndArea(geometry);
 
     state.fileName = modelName || "model.stl";
     state.dimensions = { x: sizeX, y: sizeY, z: sizeZ };
-    state.rawVolumeCm3 = volumeCm3;
+    state.rawVolumeCm3 = metrics.volumeCm3;
+    state.surfaceAreaCm2 = metrics.areaCm2;
 
     // UI Updates
     DOM.dropzone.classList.add("hidden");
@@ -374,10 +392,20 @@
     const density = matInfo.density;
     const ratePerGram = matInfo.pricePerGram;
 
-    // Effective volume based on perimeter shells + infill
+    // FDM Slicer simulation:
+    // Outer solid shell (2-3 perimeter walls + top/bottom solid layers):
+    // Average effective shell thickness is ~0.75 mm (0.075 cm)
+    const shellThicknessCm = 0.075;
+    const totalVolume = state.rawVolumeCm3;
+    const surfaceArea = state.surfaceAreaCm2 || (totalVolume * 4.0);
+
+    // Shell volume (cannot exceed total volume)
+    const estimatedShellVolume = Math.min(totalVolume, surfaceArea * shellThicknessCm);
+    const coreVolume = Math.max(0, totalVolume - estimatedShellVolume);
+
+    // Infill applies only to the internal core
     const infillRatio = state.infillPercent / 100.0;
-    const effectiveVolumeFactor = 0.28 + (0.72 * infillRatio);
-    const printedVolumeCm3 = state.rawVolumeCm3 * effectiveVolumeFactor;
+    const printedVolumeCm3 = estimatedShellVolume + (coreVolume * infillRatio);
 
     // Estimated weight in grams
     const singleWeightGrams = Math.round(printedVolumeCm3 * density * 10) / 10;
@@ -386,9 +414,9 @@
     // Layer time multiplier
     const qualityFactor = LAYER_TIME_FACTORS[state.layerHeight] || 1.0;
 
-    // Estimated print time (e.g. approx 16-18g/hr on standard coreXY)
+    // Estimated print time (modern fast CoreXY printers average ~24-28g/hr including travel/acceleration)
     const hoursPerPiece = state.rawVolumeCm3 > 0 
-      ? Math.max(0.2, (singleWeightGrams / 18.0) * qualityFactor) 
+      ? Math.max(0.2, (singleWeightGrams / 26.0) * qualityFactor) 
       : 0;
     const totalHours = hoursPerPiece * state.quantity;
 
