@@ -1,5 +1,5 @@
 /**
- * Cloudflare Worker for 3dlab.jonyz.org
+ * Cloudflare Worker for 3dlab.lv
  * Handles static assets and server-side /api/order Telegram integration.
  */
 
@@ -78,7 +78,7 @@ async function handleOrder(request, env) {
 💬 <b>Klienta piezīmes:</b> ${escapeHtml(notes)}
 ⏰ <b>Laiks:</b> ${escapeHtml(orderTime)}
 ━━━━━━━━━━━━━━━━━━━━
-🌐 <b>Vietne:</b> https://3dlab.jonyz.org`;
+🌐 <b>Vietne:</b> https://3dlab.lv`;
 
     // 2. Send Telegram text message
     const msgRes = await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {

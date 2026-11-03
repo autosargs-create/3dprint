@@ -82,7 +82,7 @@ export async function onRequestPost(context) {
 💬 <b>Klienta piezīmes:</b> ${escapeHtml(notes)}
 ⏰ <b>Laiks:</b> ${escapeHtml(orderTime)}
 ━━━━━━━━━━━━━━━━━━━━
-🌐 <b>Vietne:</b> https://3dlab.jonyz.org`;
+🌐 <b>Vietne:</b> https://3dlab.lv`;
 
     // 2. Send Telegram message
     const msgRes = await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
