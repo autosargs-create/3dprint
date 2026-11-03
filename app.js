@@ -860,78 +860,40 @@ Piegādes veids: ${state.delivery}
         }
       }
 
-      function escapeHtml(str) {
-        if (!str) return "";
-        return String(str)
-          .replace(/&/g, "&amp;")
-          .replace(/</g, "&lt;")
-          .replace(/>/g, "&gt;")
-          .replace(/"/g, "&quot;");
+      // Prepare form data for secure backend serverless function (/api/order)
+      const orderFormData = new FormData();
+      orderFormData.append("order_id", orderId);
+      orderFormData.append("client_name", clientName);
+      orderFormData.append("client_phone", clientPhone);
+      orderFormData.append("client_email", clientEmail);
+      orderFormData.append("delivery", state.delivery);
+      orderFormData.append("delivery_address", clientAddress);
+      orderFormData.append("notes", clientNotes || "Nav norādīti");
+
+      orderFormData.append("model_name", state.fileName || "model.stl");
+      orderFormData.append("dimensions", `${state.dimensions.x} × ${state.dimensions.y} × ${state.dimensions.z} mm`);
+      orderFormData.append("weight", `${weightGrams} g`);
+      orderFormData.append("volume", `${state.rawVolumeCm3.toFixed(1)} cm³`);
+      orderFormData.append("material", `${state.material} (${state.colorName})`);
+      orderFormData.append("infill", `${state.infillPercent}%`);
+      orderFormData.append("layer_height", `${state.layerHeight} mm`);
+      orderFormData.append("quantity", `${state.quantity} gab.`);
+      orderFormData.append("total_price", totalPrice);
+      orderFormData.append("order_time", timestamp);
+
+      if (state.file && state.file.size > 0) {
+        orderFormData.append("attachment", state.file, state.fileName || "model.stl");
       }
 
-      // Build Telegram message (HTML mode)
-      const messageText = 
-`🚀 <b>JAUNS 3D DRUKAS PASŪTĪJUMS!</b>
-━━━━━━━━━━━━━━━━━━━━
-🆔 <b>ID:</b> <code>${escapeHtml(orderId)}</code>
-👤 <b>Klients:</b> ${escapeHtml(clientName)}
-📞 <b>Tālrunis:</b> <code>${escapeHtml(clientPhone)}</code>
-✉️ <b>E-pasts:</b> ${escapeHtml(clientEmail)}
-
-📦 <b>Piegāde:</b> ${escapeHtml(state.delivery)}
-📍 <b>Adrese / Pakomāts:</b> ${escapeHtml(clientAddress)}
-
-📐 <b>Modelis:</b> <code>${escapeHtml(state.fileName || "model.stl")}</code>
-📏 <b>Izmēri:</b> ${state.dimensions.x} × ${state.dimensions.y} × ${state.dimensions.z} mm
-⚖️ <b>Svars / Tilpums:</b> ${weightGrams} g (${state.rawVolumeCm3.toFixed(1)} cm³)
-🧵 <b>Materiāls:</b> ${escapeHtml(state.material)} (${escapeHtml(state.colorName)})
-🧱 <b>Pildījums:</b> ${state.infillPercent}% | Slānis: ${state.layerHeight} mm
-🔢 <b>Skaits:</b> ${state.quantity} gab.
-
-💰 <b>KOPĒJĀ SUMMA:</b> <b>${escapeHtml(totalPrice)}</b>
-💬 <b>Klienta piezīmes:</b> ${escapeHtml(clientNotes || "Nav norādīti")}
-⏰ <b>Laiks:</b> ${escapeHtml(timestamp)}
-━━━━━━━━━━━━━━━━━━━━
-🌐 <b>Vietne:</b> https://3dlab.jonyz.org`;
-
-      const TG_BOT_TOKEN = "1146884292:AAFn_XbnkX6d_bcyTWfhS2ZULswQPBQmYCM";
-      const TG_CHAT_ID = "1283122537";
-
-      // 1. Send details message to Telegram
-      const msgRes = await fetch(`https://api.telegram.org/bot${TG_BOT_TOKEN}/sendMessage`, {
+      // Submit order via Cloudflare Pages Function (/api/order)
+      const orderRes = await fetch("/api/order", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          chat_id: TG_CHAT_ID,
-          text: messageText,
-          parse_mode: "HTML"
-        })
+        body: orderFormData
       });
 
-      const msgData = await msgRes.json();
-      if (!msgData.ok) {
-        throw new Error(msgData.description || "Neizdevās nosūtīt pasūtījumu uz Telegram");
-      }
-
-      // 2. Send 3D model STL file to Telegram if attached
-      if (state.file && state.file.size > 0) {
-        try {
-          const docData = new FormData();
-          docData.append("chat_id", TG_CHAT_ID);
-          docData.append("document", state.file, state.fileName || "model.stl");
-          docData.append("caption", `📁 Modelis pasūtījumam ${orderId}\n👤 ${clientName} (${totalPrice})`);
-
-          const docRes = await fetch(`https://api.telegram.org/bot${TG_BOT_TOKEN}/sendDocument`, {
-            method: "POST",
-            body: docData
-          });
-          const docResult = await docRes.json();
-          if (!docResult.ok) {
-            console.warn("Telegram document send warning:", docResult.description);
-          }
-        } catch (fileErr) {
-          console.warn("Could not upload file to Telegram:", fileErr);
-        }
+      const orderResult = await orderRes.json().catch(() => ({}));
+      if (!orderRes.ok || !orderResult.success) {
+        throw new Error(orderResult.message || "Neizdevās nosūtīt pasūtījumu uz serveri");
       }
 
       // Order successfully submitted!
