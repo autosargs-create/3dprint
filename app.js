@@ -12,10 +12,10 @@
 
   // --- CONFIGURATION & MATERIAL SPECS ---
   const MATERIAL_SPECS = {
-    PETG: { name: "PETG", density: 1.27, pricePerGram: 0.06, color: 0x00f0ff, roughness: 0.35, metalness: 0.1 },
-    PLA:  { name: "PLA",  density: 1.24, pricePerGram: 0.05, color: 0xe2e8f0, roughness: 0.5,  metalness: 0.05 },
-    TPU:  { name: "TPU",  density: 1.21, pricePerGram: 0.09, color: 0x38bdf8, roughness: 0.7,  metalness: 0.0 },
-    ASA:  { name: "ASA",  density: 1.07, pricePerGram: 0.08, color: 0x334155, roughness: 0.6,  metalness: 0.1 }
+    PETG: { name: "PETG", density: 1.27, pricePerGram: 0.042, color: 0x00f0ff, roughness: 0.35, metalness: 0.1 },
+    PLA:  { name: "PLA",  density: 1.24, pricePerGram: 0.035, color: 0xe2e8f0, roughness: 0.5,  metalness: 0.05 },
+    TPU:  { name: "TPU",  density: 1.21, pricePerGram: 0.063, color: 0x38bdf8, roughness: 0.7,  metalness: 0.0 },
+    ASA:  { name: "ASA",  density: 1.07, pricePerGram: 0.056, color: 0x334155, roughness: 0.6,  metalness: 0.1 }
   };
 
   const COLOR_HEX_MAP = {
@@ -33,9 +33,9 @@
     "0.12": 1.55  // Detailed, slower
   };
 
-  const BASE_SETUP_FEE = 2.50; // EUR
-  const MIN_ORDER_TOTAL = 3.00; // EUR
-  const MACHINE_HOUR_RATE = 1.60; // EUR/hr approx
+  const BASE_SETUP_FEE = 1.75; // EUR (samazināts par 30% no 2.50)
+  const MIN_ORDER_TOTAL = 2.10; // EUR (samazināts par 30% no 3.00)
+  const MACHINE_HOUR_RATE = 1.12; // EUR/hr approx (samazināts par 30% no 1.60)
 
   // --- APPLICATION STATE ---
   const state = {
@@ -834,7 +834,7 @@ Piegādes veids: ${state.delivery}
       const priceInfo = state.priceCalculated || {};
       const matCost = (priceInfo.materialCost || 0).toFixed(2);
       const printCost = (priceInfo.printCost || 0).toFixed(2);
-      const setupCost = (priceInfo.setupCost || 1.50).toFixed(2);
+      const setupCost = (priceInfo.setupCost || 1.75).toFixed(2);
       const weightGrams = priceInfo.estimatedWeightGrams || (state.rawVolumeCm3 * 1.25 * (state.infillPercent / 100)).toFixed(1);
 
       // If preset file hasn't finished caching yet, fetch it now
