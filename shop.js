@@ -18,7 +18,7 @@
       hex: "#2d3139",
       type: "Refill",
       typeLabel: "Refill (bez spoles)",
-      price: 14.99,
+      price: 15.99,
       stock: 2,
       weight: "1 kg",
       desc: "Elegants ogļu antracīta tonis ar dziļu matētu apdari. 100% savietojams ar atkārtoti lietojamām Bambu spolēm un AMS."
@@ -32,7 +32,7 @@
       hex: "#6c727d",
       type: "Refill",
       typeLabel: "Refill (bez spoles)",
-      price: 14.99,
+      price: 15.99,
       stock: 1,
       weight: "1 kg",
       desc: "Sporta auto estētikas iedvesmots matēts pelēks tonis. Ideāls tehniskām korpusu detaļām un moderniem aksesuāriem."
@@ -46,7 +46,7 @@
       hex: "#9ca3af",
       type: "Refill",
       typeLabel: "Refill (bez spoles)",
-      price: 14.99,
+      price: 15.99,
       stock: 1,
       weight: "1 kg",
       desc: "Gaišs un neitrāls pelnu pelēks tonis. Lieliski izceļ modeļa 3D ģeometriju un pilnībā noslēpj slāņu līnijas."
@@ -60,7 +60,7 @@
       hex: "#3d2314",
       type: "Refill",
       typeLabel: "Refill (bez spoles)",
-      price: 14.99,
+      price: 15.99,
       stock: 1,
       weight: "1 kg",
       desc: "Bagātīgs, dziļš tumšās šokolādes brūns tonis. Izcils dizaina priekšmetiem un koka imitācijas izdrukām."
@@ -74,7 +74,7 @@
       hex: "#5c3a21",
       type: "Refill",
       typeLabel: "Refill (bez spoles)",
-      price: 14.99,
+      price: 15.99,
       stock: 1,
       weight: "1 kg",
       desc: "Silts un piesātināts dabīgā koka un zemes brūnais tonis ar matētu zīdainu virsmu."
@@ -88,7 +88,7 @@
       hex: "#c85a32",
       type: "Refill",
       typeLabel: "Refill (bez spoles)",
-      price: 14.99,
+      price: 15.99,
       stock: 1,
       weight: "1 kg",
       desc: "Silts māla un terakotas ķieģeļsarkanais tonis. Īpaši iecienīts vāzēm, podiem un interjera dekoriem."
@@ -102,7 +102,7 @@
       hex: "#1e3a8a",
       type: "Refill",
       typeLabel: "Refill (bez spoles)",
-      price: 14.99,
+      price: 15.99,
       stock: 1,
       weight: "1 kg",
       desc: "Karaliski tumši zils, piesātināts tonis ar matētu faktūru."
@@ -116,7 +116,7 @@
       hex: "#0284c7",
       type: "Spool",
       typeLabel: "Ar oriģinālo spoli",
-      price: 14.99,
+      price: 15.99,
       stock: 1,
       weight: "1 kg",
       desc: "Komplektā ar oriģinālo Bambu Lab atkārtoti lietojamo spoli un RFID čipu. Svaigs un izteiksmīgs jūras zils."
@@ -130,7 +130,7 @@
       hex: "#7dd3fc",
       type: "Refill",
       typeLabel: "Refill (bez spoles)",
-      price: 14.99,
+      price: 15.99,
       stock: 1,
       weight: "1 kg",
       desc: "Gaišs un svaigs leduszils tonis ar maigu matējumu."
@@ -144,7 +144,7 @@
       hex: "#14532d",
       type: "Refill",
       typeLabel: "Refill (bez spoles)",
-      price: 14.99,
+      price: 15.99,
       stock: 1,
       weight: "1 kg",
       desc: "Dziļš priežu meža tumši zaļais tonis."
@@ -158,7 +158,7 @@
       hex: "#22c55e",
       type: "Refill",
       typeLabel: "Refill (bez spoles)",
-      price: 14.99,
+      price: 15.99,
       stock: 1,
       weight: "1 kg",
       desc: "Dabīgs, sulīgs pavasara zāles zaļais tonis."
@@ -172,7 +172,7 @@
       hex: "#84cc16",
       type: "Refill",
       typeLabel: "Refill (bez spoles)",
-      price: 14.99,
+      price: 15.99,
       stock: 1,
       weight: "1 kg",
       desc: "Košs un dzīvīgs zaļā ābola tonis."
@@ -186,7 +186,7 @@
       hex: "#991b1b",
       type: "Refill",
       typeLabel: "Refill (bez spoles)",
-      price: 14.99,
+      price: 15.99,
       stock: 1,
       weight: "1 kg",
       desc: "Prestižs un elegants bordo sarkanais tonis."
@@ -200,7 +200,7 @@
       hex: "#ef4444",
       type: "Spool",
       typeLabel: "Ar oriģinālo spoli",
-      price: 14.99,
+      price: 15.99,
       stock: 1,
       weight: "1 kg",
       desc: "Komplektā ar oriģinālo spoli un RFID čipu. Spilgti sarkans matēts tonis pamanāmām detaļām."
@@ -214,7 +214,7 @@
       hex: "#a855f7",
       type: "Refill",
       typeLabel: "Refill (bez spoles)",
-      price: 14.99,
+      price: 15.99,
       stock: 1,
       weight: "1 kg",
       desc: "Maigs ceriņkrāsas violets tonis figūrām un mākslas darbiem."
@@ -228,7 +228,7 @@
       hex: "#f97316",
       type: "Refill",
       typeLabel: "Refill (bez spoles)",
-      price: 14.99,
+      price: 15.99,
       stock: 1,
       weight: "1 kg",
       desc: "Silts un košs mandarīnu oranžais tonis."
@@ -242,7 +242,7 @@
       hex: "#f8fafc",
       type: "Spool",
       typeLabel: "Ar oriģinālo spoli",
-      price: 14.99,
+      price: 15.99,
       stock: 2,
       weight: "1 kg",
       desc: "Komplektā ar oriģinālo spoli un RFID čipu. Kristāldzidrs, zīdains matēts baltais bez spīduma."
@@ -397,7 +397,16 @@
   let cart = [];
   try {
     const saved = localStorage.getItem(CART_STORAGE_KEY);
-    if (saved) cart = JSON.parse(saved);
+    if (saved) {
+      cart = JSON.parse(saved);
+      // Sync prices with latest catalog definition
+      if (Array.isArray(cart)) {
+        cart.forEach(item => {
+          const prod = BAMBU_FILAMENTS.find(p => p.id === item.id);
+          if (prod) item.price = prod.price;
+        });
+      }
+    }
   } catch(e) {
     cart = [];
   }
@@ -572,6 +581,9 @@
         p.typeLabel.toLowerCase().includes(q)
       );
     }
+
+    const countEl = document.getElementById("shopProductsCount");
+    if (countEl) countEl.textContent = filtered.length;
 
     if (filtered.length === 0) {
       grid.innerHTML = `
