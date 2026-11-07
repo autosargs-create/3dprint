@@ -33,30 +33,61 @@ async function handleOrder(request, env) {
     }
 
     const formData = await request.formData();
+    const orderType = formData.get("order_type") || "3D_PRINT";
 
-    const orderId = formData.get("order_id") || `#3D-${Math.floor(1000 + Math.random() * 9000)}`;
+    const orderId = formData.get("order_id") || (orderType === "FILAMENT_SHOP" ? `#FIL-${Math.floor(1000 + Math.random() * 9000)}` : `#3D-${Math.floor(1000 + Math.random() * 9000)}`);
     const clientName = formData.get("client_name") || "Nav norādīts";
     const clientPhone = formData.get("client_phone") || "Nav norādīts";
     const clientEmail = formData.get("client_email") || "Nav norādīts";
     const delivery = formData.get("delivery") || "Nav norādīts";
     const deliveryAddress = formData.get("delivery_address") || "Nav norādīta";
     const notes = formData.get("notes") || "Nav norādīti";
-
-    const modelName = formData.get("model_name") || "model.stl";
-    const dimensions = formData.get("dimensions") || "N/A";
-    const weight = formData.get("weight") || "N/A";
-    const volume = formData.get("volume") || "N/A";
-    const material = formData.get("material") || "N/A";
-    const infill = formData.get("infill") || "N/A";
-    const layerHeight = formData.get("layer_height") || "N/A";
-    const quantity = formData.get("quantity") || "1 gab.";
     const totalPrice = formData.get("total_price") || "0.00 €";
     const orderTime = formData.get("order_time") || new Date().toLocaleString("lv-LV");
-
     const attachment = formData.get("attachment");
+    let modelName = "model.stl";
 
-    // 1. Build Telegram text notification (HTML format)
-    const messageText = 
+    let messageText = "";
+
+    if (orderType === "FILAMENT_SHOP") {
+      const itemsList = formData.get("items_list") || "";
+      const itemsCount = formData.get("items_count") || "1";
+      const subtotal = formData.get("subtotal") || "0.00 €";
+      const deliveryCost = formData.get("delivery_cost") || "0.00 €";
+
+      messageText = 
+`🧵 <b>JAUNS FILAMENTU PASŪTĪJUMS (3dlab.lv Veikals)!</b>
+━━━━━━━━━━━━━━━━━━━━
+🆔 <b>Pasūtījuma ID:</b> <code>${escapeHtml(orderId)}</code>
+👤 <b>Pircējs:</b> ${escapeHtml(clientName)}
+📞 <b>Tālrunis:</b> <code>${escapeHtml(clientPhone)}</code>
+✉️ <b>E-pasts:</b> ${escapeHtml(clientEmail)}
+
+📦 <b>Piegāde:</b> ${escapeHtml(delivery)}
+📍 <b>Pakomāts / Adrese:</b> ${escapeHtml(deliveryAddress)}
+
+🛍️ <b>PASŪTĪTĀS PRECES (${escapeHtml(itemsCount)} gab.):</b>
+${itemsList}
+
+💵 <b>Preču summa:</b> ${escapeHtml(subtotal)}
+🚚 <b>Piegāde:</b> ${escapeHtml(deliveryCost)}
+💰 <b>KOPĀ APMAKSAI:</b> <b>${escapeHtml(totalPrice)}</b>
+
+💬 <b>Pircēja piezīmes:</b> ${escapeHtml(notes)}
+⏰ <b>Laiks:</b> ${escapeHtml(orderTime)}
+━━━━━━━━━━━━━━━━━━━━
+🌐 <b>Veikals:</b> https://3dlab.lv/#shop`;
+    } else {
+      modelName = formData.get("model_name") || "model.stl";
+      const dimensions = formData.get("dimensions") || "N/A";
+      const weight = formData.get("weight") || "N/A";
+      const volume = formData.get("volume") || "N/A";
+      const material = formData.get("material") || "N/A";
+      const infill = formData.get("infill") || "N/A";
+      const layerHeight = formData.get("layer_height") || "N/A";
+      const quantity = formData.get("quantity") || "1 gab.";
+
+      messageText = 
 `🚀 <b>JAUNS 3D DRUKAS PASŪTĪJUMS!</b>
 ━━━━━━━━━━━━━━━━━━━━
 🆔 <b>ID:</b> <code>${escapeHtml(orderId)}</code>
@@ -79,6 +110,7 @@ async function handleOrder(request, env) {
 ⏰ <b>Laiks:</b> ${escapeHtml(orderTime)}
 ━━━━━━━━━━━━━━━━━━━━
 🌐 <b>Vietne:</b> https://3dlab.lv`;
+    }
 
     // 2. Send Telegram text message
     const msgRes = await fetch(`https://api.telegram.org/bot${botToken}/sendMessage`, {
