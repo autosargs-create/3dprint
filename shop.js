@@ -11,6 +11,7 @@
     // === PLA MATTE (1kg, 1.75mm) ===
     {
       id: "pla-matte-charcoal",
+      image: "filaments/pla-matte-charcoal.webp",
       material: "PLA Matte",
       category: "pla",
       colorName: "Charcoal (11101)",
@@ -25,6 +26,7 @@
     },
     {
       id: "pla-matte-nardo-gray",
+      image: "filaments/pla-matte-nardo-gray.webp",
       material: "PLA Matte",
       category: "pla",
       colorName: "Nardo Gray (11104)",
@@ -39,6 +41,7 @@
     },
     {
       id: "pla-matte-ash-gray",
+      image: "filaments/pla-matte-ash-gray.webp",
       material: "PLA Matte",
       category: "pla",
       colorName: "Ash Gray (11102)",
@@ -53,6 +56,7 @@
     },
     {
       id: "pla-matte-dark-chocolate",
+      image: "filaments/pla-matte-dark-chocolate.webp",
       material: "PLA Matte",
       category: "pla",
       colorName: "Dark Chocolate (11802)",
@@ -67,6 +71,7 @@
     },
     {
       id: "pla-matte-dark-brown",
+      image: "filaments/pla-matte-dark-brown.webp",
       material: "PLA Matte",
       category: "pla",
       colorName: "Dark Brown (11801)",
@@ -81,6 +86,7 @@
     },
     {
       id: "pla-matte-terracotta",
+      image: "filaments/pla-matte-terracotta.webp",
       material: "PLA Matte",
       category: "pla",
       colorName: "Terracotta (11203)",
@@ -95,6 +101,7 @@
     },
     {
       id: "pla-matte-dark-blue",
+      image: "filaments/pla-matte-dark-blue.webp",
       material: "PLA Matte",
       category: "pla",
       colorName: "Dark Blue (11602)",
@@ -109,6 +116,7 @@
     },
     {
       id: "pla-matte-marine-blue-spool",
+      image: "filaments/pla-matte-marine-blue-spool.webp",
       material: "PLA Matte",
       category: "pla",
       colorName: "Marine Blue (11600)",
@@ -123,6 +131,7 @@
     },
     {
       id: "pla-matte-ice-blue",
+      image: "filaments/pla-matte-ice-blue.webp",
       material: "PLA Matte",
       category: "pla",
       colorName: "Ice Blue (11601)",
@@ -137,6 +146,7 @@
     },
     {
       id: "pla-matte-dark-green",
+      image: "filaments/pla-matte-dark-green.webp",
       material: "PLA Matte",
       category: "pla",
       colorName: "Dark Green (11501)",
@@ -151,6 +161,7 @@
     },
     {
       id: "pla-matte-grass-green",
+      image: "filaments/pla-matte-grass-green.webp",
       material: "PLA Matte",
       category: "pla",
       colorName: "Grass Green (11500)",
@@ -165,6 +176,7 @@
     },
     {
       id: "pla-matte-apple-green",
+      image: "filaments/pla-matte-apple-green.webp",
       material: "PLA Matte",
       category: "pla",
       colorName: "Apple Green (11502)",
@@ -179,6 +191,7 @@
     },
     {
       id: "pla-matte-dark-red",
+      image: "filaments/pla-matte-dark-red.webp",
       material: "PLA Matte",
       category: "pla",
       colorName: "Dark Red (11202)",
@@ -193,6 +206,7 @@
     },
     {
       id: "pla-matte-scarlet-red-spool",
+      image: "filaments/pla-matte-scarlet-red-spool.webp",
       material: "PLA Matte",
       category: "pla",
       colorName: "Scarlet Red (11200)",
@@ -207,6 +221,7 @@
     },
     {
       id: "pla-matte-lilac-purple",
+      image: "filaments/pla-matte-lilac-purple.webp",
       material: "PLA Matte",
       category: "pla",
       colorName: "Lilac Purple (11700)",
@@ -221,6 +236,7 @@
     },
     {
       id: "pla-matte-mandarin-orange",
+      image: "filaments/pla-matte-mandarin-orange.webp",
       material: "PLA Matte",
       category: "pla",
       colorName: "Mandarin Orange (11300)",
@@ -235,6 +251,7 @@
     },
     {
       id: "pla-matte-ivory-white-spool",
+      image: "filaments/pla-matte-ivory-white-spool.webp",
       material: "PLA Matte",
       category: "pla",
       colorName: "Ivory White (11100)",
@@ -251,6 +268,7 @@
     // === PETG MATTE (1kg, 1.75mm) ===
     {
       id: "petg-matte-lime-spool",
+      image: "filaments/petg-matte-lime-spool.webp",
       material: "PETG Matte",
       category: "petg",
       colorName: "Lime (35500)",
@@ -265,6 +283,7 @@
     },
     {
       id: "petg-matte-avocado-green-spool",
+      image: "filaments/petg-matte-avocado-green-spool.webp",
       material: "PETG Matte",
       category: "petg",
       colorName: "Avocado Green (35501)",
@@ -279,6 +298,7 @@
     },
     {
       id: "petg-matte-baby-blue-spool",
+      image: "filaments/petg-matte-baby-blue-spool.webp",
       material: "PETG Matte",
       category: "petg",
       colorName: "Baby Blue (35600)",
@@ -293,6 +313,7 @@
     },
     {
       id: "petg-matte-violet-spool",
+      image: "filaments/petg-matte-violet-spool.webp",
       material: "PETG Matte",
       category: "petg",
       colorName: "Violet (35702)",
@@ -307,6 +328,7 @@
     },
     {
       id: "petg-matte-pink-spool",
+      image: "filaments/petg-matte-pink-spool.webp",
       material: "PETG Matte",
       category: "petg",
       colorName: "Pink (35700)",
@@ -321,6 +343,7 @@
     },
     {
       id: "petg-matte-gray-spool",
+      image: "filaments/petg-matte-gray-spool.webp",
       material: "PETG Matte",
       category: "petg",
       colorName: "Gray (35102)",
@@ -335,6 +358,7 @@
     },
     {
       id: "petg-matte-white-spool",
+      image: "filaments/petg-matte-white-spool.webp",
       material: "PETG Matte",
       category: "petg",
       colorName: "White (35100)",
@@ -349,6 +373,7 @@
     },
     {
       id: "petg-matte-white-refill",
+      image: "filaments/petg-matte-white-refill.webp",
       material: "PETG Matte",
       category: "petg",
       colorName: "White (35100)",
@@ -363,6 +388,7 @@
     },
     {
       id: "petg-matte-black-spool",
+      image: "filaments/petg-matte-black-spool.webp",
       material: "PETG Matte",
       category: "petg",
       colorName: "Black (35101)",
@@ -377,6 +403,7 @@
     },
     {
       id: "petg-matte-black-refill",
+      image: "filaments/petg-matte-black-refill.webp",
       material: "PETG Matte",
       category: "petg",
       colorName: "Black (35101)",
@@ -403,7 +430,10 @@
       if (Array.isArray(cart)) {
         cart.forEach(item => {
           const prod = BAMBU_FILAMENTS.find(p => p.id === item.id);
-          if (prod) item.price = prod.price;
+          if (prod) {
+            item.price = prod.price;
+            item.image = prod.image;
+          }
         });
       }
     }
@@ -443,6 +473,7 @@
     } else {
       cart.push({
         id: product.id,
+        image: product.image,
         material: product.material,
         colorName: product.colorName,
         colorLabel: product.colorLabel,
@@ -625,7 +656,10 @@
           </div>
 
           <div class="product-img-wrap">
-            ${getSpoolSvg(p.hex, !isSpool)}
+            <img src="${p.image}" alt="${p.material} — ${p.colorLabel}" class="product-real-img" loading="lazy" onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+            <div class="svg-fallback-wrap" style="display:none;">
+              ${getSpoolSvg(p.hex, !isSpool)}
+            </div>
             <div class="color-swatch-badge">
               <span class="color-dot" style="background-color: ${p.hex}; border: ${p.hex.toLowerCase() === '#ffffff' ? '1px solid #94a3b8' : 'none'}"></span>
               <span class="color-name">${p.colorLabel}</span>
@@ -743,10 +777,11 @@
       const itemTotal = (item.price * item.quantity).toFixed(2);
       return `
         <div class="cart-item-row" data-id="${item.id}">
-          <div class="cart-item-color-dot" style="background-color: ${item.hex}; border: ${item.hex.toLowerCase() === '#ffffff' ? '1px solid #94a3b8' : 'none'}"></div>
+          <img src="${item.image || 'filaments/' + item.id + '.webp'}" alt="${item.colorLabel}" class="cart-item-thumb" onerror="this.style.display='none';">
           <div class="cart-item-info">
             <div class="cart-item-title">${item.material} — ${item.colorLabel}</div>
             <div class="cart-item-meta">
+              <span class="cart-item-color-dot" style="background-color: ${item.hex}; border: ${item.hex.toLowerCase() === '#ffffff' ? '1px solid #94a3b8' : 'none'}"></span>
               <span class="cart-meta-badge">${item.typeLabel}</span>
               <span class="cart-meta-code">${item.colorName}</span>
             </div>
