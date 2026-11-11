@@ -1,4 +1,4 @@
-# Jonyz 3D Print Lab (3dlab.jonyz.org)
+# 3DLab.lv (3dlab.lv)
 
 Mūsdienīga, ātra un uzticama 3D drukas pasūtījumu un cenas aprēķina platforma, kas radīta izvietošanai uz **Cloudflare Pages** (bezmaksas hostings ar neierobežotu trafiku).
 

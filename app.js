@@ -1,5 +1,5 @@
 /* ==========================================================================
-   JONYZ 3D PRINT LAB — APPLICATION ENGINE (app.js)
+   3DLAB PRINT LAB — APPLICATION ENGINE (app.js)
    - Three.js 3D Viewport with OrbitControls & STLLoader
    - Real-time Mesh Volume & Dimension Analysis (Signed Tetrahedra)
    - Instant Slicer & Material Cost Calculator
