@@ -4,7 +4,7 @@
    - Real-time Mesh Volume & Dimension Analysis (Signed Tetrahedra)
    - Instant Slicer & Material Cost Calculator
    - Real STL Model Preset Loader (Benchy, Phone Stand, Hanger, Organizer)
-   - Order Checkout & Email Dispatch (autosargs@gmail.com)
+   - Order Checkout & Email Dispatch (serviss@dlkonstrukcijas.lv)
    ========================================================================== */
 
 (function() {
@@ -694,12 +694,49 @@
       DOM.successModal.classList.add("hidden");
     });
 
+    // Legal Modals (Terms & Distance Contract, Privacy Policy)
+    const termsModal = document.getElementById("termsModal");
+    const privacyModal = document.getElementById("privacyModal");
+
+    const openTerms = (e) => {
+      if (e) e.preventDefault();
+      termsModal?.classList.remove("hidden");
+      document.body.style.overflow = "hidden";
+    };
+    const closeTerms = () => {
+      termsModal?.classList.add("hidden");
+      document.body.style.overflow = "";
+    };
+    const openPrivacy = (e) => {
+      if (e) e.preventDefault();
+      privacyModal?.classList.remove("hidden");
+      document.body.style.overflow = "hidden";
+    };
+    const closePrivacy = () => {
+      privacyModal?.classList.add("hidden");
+      document.body.style.overflow = "";
+    };
+
+    document.getElementById("openTermsFooterBtn")?.addEventListener("click", openTerms);
+    document.getElementById("openDeliveryFooterBtn")?.addEventListener("click", openTerms);
+    document.getElementById("closeTermsModalBtn")?.addEventListener("click", closeTerms);
+    document.getElementById("closeTermsActionBtn")?.addEventListener("click", closeTerms);
+    termsModal?.addEventListener("click", (e) => { if (e.target === termsModal) closeTerms(); });
+
+    document.getElementById("openPrivacyFooterBtn")?.addEventListener("click", openPrivacy);
+    document.getElementById("closePrivacyModalBtn")?.addEventListener("click", closePrivacy);
+    document.getElementById("closePrivacyActionBtn")?.addEventListener("click", closePrivacy);
+    privacyModal?.addEventListener("click", (e) => { if (e.target === privacyModal) closePrivacy(); });
+
+    document.querySelectorAll(".open-terms-trigger").forEach(el => el.addEventListener("click", openTerms));
+    document.querySelectorAll(".open-privacy-trigger").forEach(el => el.addEventListener("click", openPrivacy));
+
     // Form Submission
     DOM.orderSubmitForm.addEventListener("submit", handleOrderSubmit);
   }
 
   // =========================================================================
-  // 7. ORDER MODAL & SUBMISSION (TO autosargs@gmail.com)
+  // 7. ORDER MODAL & SUBMISSION (SIA DL konstrukcijas / serviss@dlkonstrukcijas.lv)
   // =========================================================================
   function updateModalTotals() {
     let deliveryExtra = 0;
@@ -916,7 +953,7 @@ Piegādes veids: ${state.delivery}
 
     } catch (err) {
       console.error("Order submission failed:", err);
-      showFormError(`Radās kļūda: ${err.message || "Neizdevās nosūtīt"}. Lūdzu rakstiet uz autosargs@gmail.com`);
+      showFormError(`Radās kļūda: ${err.message || "Neizdevās nosūtīt"}. Lūdzu rakstiet uz serviss@dlkonstrukcijas.lv`);
       DOM.submitOrderBtn.disabled = false;
       DOM.submitOrderBtn.innerHTML = `
         <span>Nosūtīt pasūtījumu</span>

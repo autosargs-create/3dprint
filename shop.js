@@ -932,7 +932,7 @@
 
     } catch(err) {
       console.error("Cart checkout error:", err);
-      showCartError(`Kļūda: ${err.message || "Neizdevās nosūtīt pasūtījumu"}. Lūdzu rakstiet uz autosargs@gmail.com`);
+      showCartError(`Kļūda: ${err.message || "Neizdevās nosūtīt pasūtījumu"}. Lūdzu rakstiet uz serviss@dlkonstrukcijas.lv`);
     } finally {
       submitBtn.disabled = false;
       renderCartModalItems();

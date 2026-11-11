@@ -920,14 +920,14 @@
         <details class="faq-item glass-panel">
           <summary class="faq-question">Kā notiek piegāde un samaksa?</summary>
           <div class="faq-answer">
-            Piegādi nodrošinām ar <strong>Omniva</strong> vai <strong>DPD</strong> pakomātiem visā Latvijā (parasti 1–2 darba dienu laikā pēc izgatavošanas). Pēc pasūtījuma saņemšanas mēs nosūtām rēķinu uz jūsu norādīto e-pastu.
+            Piegādi nodrošinām ar <strong>Omniva</strong> vai <strong>DPD</strong> pakomātiem visā Latvijā (parasti 1–2 darba dienu laikā pēc izgatavošanas). Pēc pasūtījuma pieteikuma izskatīšanas SIA "DL konstrukcijas" sagatavo un nosūta oficiālu priekšapmaksas rēķinu uz jūsu norādīto e-pastu. Ražošana tiek uzsākta pēc rēķina apmaksas.
           </div>
         </details>
 
         <details class="faq-item glass-panel">
           <summary class="faq-question">Ko darīt, ja man ir tikai rasējums vai salūzusi detaļa, bet nav 3D faila?</summary>
           <div class="faq-answer">
-            Nav problēmu! Uzraksti mums uz <a href="mailto:autosargs@gmail.com" class="accent-link">autosargs@gmail.com</a> ar fotoattēlu un izmēriem — piedāvājam arī 3D modelēšanas pakalpojumus pēc jūsu parauga.
+            Nav problēmu! Uzraksti mums uz <a href="mailto:serviss@dlkonstrukcijas.lv" class="accent-link">serviss@dlkonstrukcijas.lv</a> ar fotoattēlu un izmēriem — piedāvājam arī 3D modelēšanas pakalpojumus pēc jūsu parauga.
           </div>
         </details>
       </div>
@@ -1012,6 +1012,14 @@
           <div class="form-group">
             <label class="input-label" for="clientNotes">Komentāri vai īpašas prasības</label>
             <textarea id="clientNotes" name="notes" rows="2" placeholder="Papildu vēlmes, vītņu ieliktņi, virsmas prasības..." class="custom-textarea"></textarea>
+          </div>
+
+          <div class="legal-checkout-notice">
+            <label class="legal-consent-label">
+              <input type="checkbox" id="orderTermsCheck" required checked>
+              <span>Piekrītu <a href="#" class="open-terms-trigger">Distances līguma</a> un <a href="#" class="open-privacy-trigger">Privātuma politikas</a> noteikumiem.</span>
+            </label>
+            <p class="legal-checkout-sub">Pakalpojumu sniedz SIA "DL konstrukcijas" struktūrvienība "3dlab.lv". Cenas norādītas ar PVN 21%. Pēc saskaņošanas rēķins tiks nosūtīts uz Jūsu e-pastu.</p>
           </div>
 
           <!-- Status message container -->
@@ -1129,6 +1137,14 @@
             <textarea id="cartNotes" name="notes" rows="2" placeholder="Papildu norādes, rekvizīti uzņēmumam..." class="custom-textarea"></textarea>
           </div>
 
+          <div class="legal-checkout-notice">
+            <label class="legal-consent-label">
+              <input type="checkbox" id="cartTermsCheck" required checked>
+              <span>Piekrītu <a href="#" class="open-terms-trigger">Distances līguma</a> un <a href="#" class="open-privacy-trigger">Privātuma politikas</a> noteikumiem.</span>
+            </label>
+            <p class="legal-checkout-sub">Pakalpojumu sniedz SIA "DL konstrukcijas" struktūrvienība "3dlab.lv". Cenas norādītas ar PVN 21%. Rēķins apmaksai tiks nosūtīts uz norādīto e-pastu.</p>
+          </div>
+
           <!-- Status message container -->
           <div id="cartStatusMsg" class="form-status-msg hidden"></div>
 
@@ -1164,35 +1180,175 @@
       </div>
       <h3 class="modal-title">Pasūtījums veiksmīgi nosūtīts!</h3>
       <p class="modal-sub">
-        Paldies! Pasūtījuma kopsavilkums ir nosūtīts uz darbnīcas e-pastu <strong>autosargs@gmail.com</strong>.
+        Paldies! Pasūtījuma pieteikums ir saņemts. Sagatavosim tāmi un rēķinu ar bankas rekvizītiem, ko nosūtīsim uz Jūsu e-pastu.
       </p>
       <div class="success-details-card font-mono">
         <p>Pasūtījuma ID: <strong id="successOrderId" class="accent-text">#3D-0000</strong></p>
-        <p>Mēs sazināsimies ar jums 1h laikā, lai apstiprinātu izgatavošanas grafiku.</p>
+        <p>SIA "DL konstrukcijas" sazināsies ar Jums 1h laikā darba laikā.</p>
       </div>
       <button type="button" id="successDoneBtn" class="btn btn-primary btn-block">Lieliski!</button>
+    </div>
+  </div>
+
+  <!-- Terms & Distance Contract Modal -->
+  <div id="termsModal" class="modal-backdrop hidden">
+    <div class="modal-card legal-modal-card glass-panel">
+      <div class="modal-header">
+        <div>
+          <h3 class="modal-title">Distances līgums un pasūtīšanas noteikumi</h3>
+          <p class="modal-sub">SIA "DL konstrukcijas" struktūrvienība "3dlab.lv"</p>
+        </div>
+        <button type="button" id="closeTermsModalBtn" class="modal-close-btn" aria-label="Aizvērt">&times;</button>
+      </div>
+      <div class="modal-body legal-modal-body">
+        <h4>1. Vispārīgie noteikumi</h4>
+        <p>Šis Distances līgums (turpmāk — Līgums) tiek noslēgts starp pakalpojuma sniedzēju <strong>SIA "DL konstrukcijas"</strong> (reģ. Nr. 45403032263, PVN reģ. Nr. LV45403032263, juridiskā adrese: Andreja Pormaļa iela 15, Jēkabpils, LV-5201, e-pasts: serviss@dlkonstrukcijas.lv), kuras oficiāli reģistrētā struktūrvienība ir tīmekļa vietne <strong>3dlab.lv</strong> (turpmāk — Pārdevējs vai Izpildītājs), un personu, kas veic pasūtījumu tīmekļa vietnē 3dlab.lv (turpmāk — Pircējs vai Klients).</p>
+
+        <h4>2. Cenas un norēķinu kārtība</h4>
+        <p>Visas pakalpojumu un preču cenas tīmekļa vietnē 3dlab.lv ir norādītas eiro (EUR) ar iekļautu pievienotās vērtības nodokli (PVN 21%).</p>
+        <p>Norēķini tiek veikti ar bezskaidras naudas bankas pārskaitījumu. Pēc pasūtījuma pieteikuma un 3D modeļu tehniskās izvērtēšanas Izpildītājs sagatavo un uz Klienta norādīto e-pasta adresi nosūta elektronisku priekšapmaksas rēķinu ar norēķinu rekvizītiem. Pasūtījuma izpilde un ražošana tiek uzsākta pēc rēķina apmaksas saņemšanas.</p>
+
+        <h4>3. Pasūtījuma izpilde un piegāde</h4>
+        <p>3D drukas un pēcapstrādes izpildes termiņš tiek saskaņots individuāli (parasti 1–3 darba dienas atkarībā no detaļu apjoma un noslodzes). Gatavās produkcijas piegāde tiek veikta ar Omniva vai DPD pakomātu starpniecību visā Latvijā (1–2 darba dienas), vai saņemot personīgi darbnīcā pēc iepriekšējas vienošanās.</p>
+
+        <h4>4. Atteikuma tiesības un to ierobežojumi</h4>
+        <p>Standarta nemainītām precēm (piemēram, rūpnieciski iepakotiem filamentiem) Pircējam kā patērētājam ir tiesības izmantot atteikuma tiesības 14 dienu laikā no preces saņemšanas dienas, saglabājot oriģinālo iepakojumu un preces stāvokli.</p>
+        <p><strong>Būtisks izņēmums individuālajiem pasūtījumiem:</strong> Saskaņā ar Ministru kabineta 2014. gada 20. maija noteikumu Nr. 255 „Noteikumi par distances līgumu” <strong>22.3. apakšpunktu</strong>, patērētājs <strong>nevar izmantot atteikuma tiesības</strong>, ja prece tiek izgatavota pēc patērētāja norādījumiem vai prece ir nepārprotami personalizēta. Līdz ar to individuāli pēc Klienta 3D CAD failiem/rasējumiem drukātām detaļām un individuāliem modelēšanas darbiem 14 dienu atteikuma tiesības nav piemērojamas.</p>
+
+        <h4>5. Strīdu izskatīšana</h4>
+        <p>Jebkuras domstarpības tiek risinātas abpusēju sarunu ceļā. Ja vienošanos panākt neizdodas, Klientam ir tiesības vērsties Patērētāju tiesību aizsardzības centrā (PTAC, Brīvības iela 55, Rīga, LV-1010, tīmekļa vietne: <a href="https://www.ptac.gov.lv" target="_blank" rel="noopener" class="accent-link">www.ptac.gov.lv</a>) vai izmantot Eiropas Komisijas strīdu izšķiršanas tiešsaistes platformu (ODR).</p>
+      </div>
+      <div class="modal-actions">
+        <button type="button" id="closeTermsActionBtn" class="btn btn-primary btn-block">Aizvērt</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Privacy Policy Modal -->
+  <div id="privacyModal" class="modal-backdrop hidden">
+    <div class="modal-card legal-modal-card glass-panel">
+      <div class="modal-header">
+        <div>
+          <h3 class="modal-title">Privātuma politika (VDAR)</h3>
+          <p class="modal-sub">Personas datu apstrādes un konfidencialitātes principi</p>
+        </div>
+        <button type="button" id="closePrivacyModalBtn" class="modal-close-btn" aria-label="Aizvērt">&times;</button>
+      </div>
+      <div class="modal-body legal-modal-body">
+        <h4>1. Pārzinis</h4>
+        <p>Personas datu apstrādes pārzinis ir <strong>SIA "DL konstrukcijas"</strong> (reģ. Nr. 45403032263, juridiskā adrese: Andreja Pormaļa iela 15, Jēkabpils, LV-5201, e-pasts: serviss@dlkonstrukcijas.lv, tīmekļa vietne: 3dlab.lv).</p>
+
+        <h4>2. Kādus datus mēs apstrādājam</h4>
+        <p>Mēs apstrādājam tikai tos datus, kurus Klients brīvprātīgi norāda pasūtījuma vai pieprasījuma pieteikšanas formā:</p>
+        <ul>
+          <li>Vārds, uzvārds vai uzņēmuma nosaukums un rekvizīti;</li>
+          <li>Tālruņa numurs (saziņai un pakomāta SMS saņemšanai);</li>
+          <li>E-pasta adrese (rēķina nosūtīšanai un tehniskajai saskaņošanai);</li>
+          <li>Izvēlētā piegādes adrese vai pakomāta atrašanās vieta;</li>
+          <li>Augšupielādētie 3D CAD modeļi, rasējumi un tehniskie komentāri.</li>
+        </ul>
+
+        <h4>3. Apstrādes mērķis un tiesiskais pamats</h4>
+        <p>Datu apstrāde tiek veikta saskaņā ar Vispārīgo datu aizsardzības regulu (VDAR / GDPR) šādiem mērķiem:</p>
+        <ul>
+          <li>Līguma noslēgšanai un pasūtījuma izpildei (VDAR 6. panta 1. punkta b) apakšpunkts);</li>
+          <li>Likumisko grāmatvedības un nodokļu pienākumu izpildei (VDAR 6. panta 1. punkta c) apakšpunkts);</li>
+          <li>Piegādes organizēšanai uz Klienta izvēlēto pakomātu.</li>
+        </ul>
+
+        <h4>4. Konfidencialitāte un 3D failu drošība</h4>
+        <p>Klienta augšupielādētie 3D CAD modeļi un intelektuālais īpašums ir stingri konfidenciāli. Mēs nekad nenododam, neizplatām, nepublicējam un nepārdodam Klienta modeļus trešajām personām. Pēc pasūtījuma pabeigšanas faili tiek arhivēti tikai atkārtotu pasūtījumu ērtībai vai pēc pieprasījuma nekavējoties neatgriezeniski dzēsti.</p>
+
+        <h4>5. Datu nodošana trešajām personām</h4>
+        <p>Dati tiek nodoti tikai un vienīgi pakalpojuma nodrošināšanai nepieciešamajiem sadarbības partneriem: kurjeru un pakomātu pakalpojumu sniedzējiem (SIA Omniva Latvija vai SIA DPD Latvija) un grāmatvedības sistēmai atbilstoši Latvijas Republikas likumdošanai.</p>
+
+        <h4>6. Klienta tiesības</h4>
+        <p>Klientam ir tiesības pieprasīt piekļuvi saviem personas datiem, to labošanu, dzēšanu vai apstrādes ierobežošanu, nosūtot rakstveida pieprasījumu uz e-pastu <strong>serviss@dlkonstrukcijas.lv</strong>.</p>
+      </div>
+      <div class="modal-actions">
+        <button type="button" id="closePrivacyActionBtn" class="btn btn-primary btn-block">Aizvērt</button>
+      </div>
     </div>
   </div>
 
   <!-- Footer -->
   <footer class="site-footer">
     <div class="container footer-inner">
-      <div class="footer-brand">
-        <span class="brand-title">JONYZ <span class="accent-text">3D</span> PRINT LAB</span>
-        <p class="footer-note">Augstas kvalitātes FDM 3D drukas pakalpojumi prototipiem un sērijveida detaļām.</p>
+      <div class="footer-grid">
+        <div class="footer-col footer-brand-col">
+          <span class="brand-title">3DLAB<span class="accent-text">.LV</span></span>
+          <p class="footer-tagline">Augstas precizitātes FDM 3D druka, CAD inženiertehniskā modelēšana un oriģinālie Bambu Lab materiāli.</p>
+          <div class="footer-structure-badge">
+            Tīmekļa vietne <strong>3dlab.lv</strong> ir <strong>SIA "DL konstrukcijas"</strong> reģistrēta struktūrvienība.
+          </div>
+        </div>
+
+        <div class="footer-col footer-rekviziti-col">
+          <h4 class="footer-col-title">Uzņēmuma rekvizīti</h4>
+          <ul class="footer-rekviziti-list">
+            <li>
+              <span class="r-label">Komersants</span>
+              <span class="r-val">SIA "DL konstrukcijas"</span>
+            </li>
+            <li>
+              <span class="r-label">Struktūrvienība</span>
+              <span class="r-val">3dlab.lv</span>
+            </li>
+            <li>
+              <span class="r-label">Reģistrācijas Nr.</span>
+              <span class="r-val">45403032263</span>
+            </li>
+            <li>
+              <span class="r-label">PVN reģistrācijas Nr.</span>
+              <span class="r-val">LV45403032263</span>
+            </li>
+            <li>
+              <span class="r-label">Juridiskā adrese</span>
+              <span class="r-val">Andreja Pormaļa iela 15, Jēkabpils, LV-5201</span>
+            </li>
+          </ul>
+        </div>
+
+        <div class="footer-col footer-contact-col">
+          <h4 class="footer-col-title">Saziņa & Norēķini</h4>
+          <ul class="footer-contact-list">
+            <li>
+              <span class="r-label">E-pasts saziņai</span>
+              <span class="r-val"><a href="mailto:serviss@dlkonstrukcijas.lv" class="accent-link">serviss@dlkonstrukcijas.lv</a></span>
+            </li>
+            <li>
+              <span class="r-label">Tīmekļa vietne</span>
+              <span class="r-val"><a href="https://3dlab.lv" class="accent-link">3dlab.lv</a></span>
+            </li>
+            <li>
+              <span class="r-label">Apmaksas kārtība</span>
+              <span class="r-val">Ar pārskaitījumu (rēķins ar bankas rekvizītiem tiek nosūtīts uz e-pastu)</span>
+            </li>
+            <li>
+              <span class="r-label">Pievienotās vērtības nodoklis</span>
+              <span class="r-val">Visas cenas vietnē norādītas EUR ar PVN 21%</span>
+            </li>
+          </ul>
+        </div>
       </div>
-      <div class="footer-contact">
-        <span>E-pasts saziņai: <a href="mailto:autosargs@gmail.com" class="accent-link">autosargs@gmail.com</a></span>
-        <span>Vietne: <a href="https://3dlab.lv" class="accent-link">3dlab.lv</a></span>
-      </div>
-      <div class="footer-copy">
-        &copy; 2026 Jonyz 3D Print Lab. Visas tiesības aizsargātas. Izvietots uz Cloudflare Pages.
+
+      <div class="footer-legal-bar">
+        <div class="footer-legal-links">
+          <button type="button" class="legal-link-btn" id="openTermsFooterBtn">Distances līgums</button>
+          <span class="legal-dot">•</span>
+          <button type="button" class="legal-link-btn" id="openPrivacyFooterBtn">Privātuma politika</button>
+          <span class="legal-dot">•</span>
+          <button type="button" class="legal-link-btn" id="openDeliveryFooterBtn">Piegādes & Apmaksas noteikumi</button>
+        </div>
+        <div class="footer-copy">
+          &copy; 2026 SIA "DL konstrukcijas" (3dlab.lv). Visas tiesības aizsargātas. Izvietots uz Cloudflare Pages.
+        </div>
       </div>
     </div>
   </footer>
 
   <!-- Application Logic -->
-  <script src="app.js?v=13"></script>
-  <script src="shop.js?v=3"></script>
+  <script src="app.js?v=14"></script>
+  <script src="shop.js?v=4"></script>
 </body>
 </html>

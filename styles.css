@@ -1629,35 +1629,247 @@ details[open] .faq-question::after {
 /* Site Footer */
 .site-footer {
   border-top: 1px solid var(--border-glass);
-  padding: 40px 0;
-  background: rgba(5, 6, 9, 0.9);
+  padding: 50px 0 30px;
+  background: rgba(5, 6, 9, 0.95);
+  margin-top: 60px;
 }
 
 .footer-inner {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  text-align: center;
-  gap: 16px;
+  gap: 36px;
 }
 
-.footer-note {
-  font-size: 0.85rem;
-  color: var(--text-muted);
-  max-width: 500px;
-  margin-top: 4px;
+.footer-grid {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr 1fr;
+  gap: 36px;
+  width: 100%;
+  text-align: left;
 }
 
-.footer-contact {
+.footer-col {
   display: flex;
-  gap: 24px;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.footer-brand-col .brand-title {
+  font-size: 1.3rem;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+}
+
+.footer-tagline {
   font-size: 0.88rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.footer-structure-badge {
+  background: rgba(0, 229, 255, 0.08);
+  border: 1px solid rgba(0, 229, 255, 0.25);
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 0.82rem;
+  color: var(--text-primary);
+  line-height: 1.5;
+}
+
+.footer-structure-badge strong {
+  color: var(--accent-cyan);
+}
+
+.footer-col-title {
+  font-size: 0.95rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-primary);
+  margin: 0 0 4px 0;
+  position: relative;
+  display: inline-block;
+}
+
+.footer-col-title::after {
+  content: "";
+  display: block;
+  width: 28px;
+  height: 2px;
+  background: var(--accent-cyan);
+  margin-top: 6px;
+  border-radius: 2px;
+}
+
+.footer-rekviziti-list,
+.footer-contact-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 0.84rem;
+  color: var(--text-secondary);
+  line-height: 1.45;
+}
+
+.footer-rekviziti-list li,
+.footer-contact-list li {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.footer-rekviziti-list .r-label,
+.footer-contact-list .r-label {
+  font-size: 0.74rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-muted);
+}
+
+.footer-rekviziti-list .r-val,
+.footer-contact-list .r-val {
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.footer-legal-bar {
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  padding-top: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  text-align: center;
+}
+
+.footer-legal-links {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+}
+
+.legal-link-btn {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  padding: 4px 6px;
+  transition: color 0.2s ease;
+}
+
+.legal-link-btn:hover {
+  color: var(--accent-cyan);
+}
+
+.legal-dot {
+  color: var(--text-dim);
+  font-size: 0.75rem;
 }
 
 .footer-copy {
-  font-size: 0.78rem;
+  font-size: 0.8rem;
   color: var(--text-dim);
-  margin-top: 10px;
+}
+
+/* Legal notice in checkout forms */
+.legal-checkout-notice {
+  background: rgba(0, 0, 0, 0.35);
+  border: 1px solid var(--border-glass);
+  border-radius: 8px;
+  padding: 12px 14px;
+  margin: 16px 0 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.legal-consent-label {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 0.84rem;
+  color: var(--text-primary);
+  cursor: pointer;
+  line-height: 1.4;
+}
+
+.legal-consent-label input[type="checkbox"] {
+  accent-color: var(--accent-cyan);
+  width: 17px;
+  height: 17px;
+  margin-top: 2px;
+  cursor: pointer;
+}
+
+.legal-consent-label a {
+  color: var(--accent-cyan);
+  text-decoration: underline;
+}
+
+.legal-checkout-sub {
+  font-size: 0.76rem;
+  color: var(--text-muted);
+  line-height: 1.4;
+  margin: 0;
+}
+
+/* Legal Modals Content */
+.legal-modal-card {
+  max-width: 680px;
+}
+
+.legal-modal-body {
+  font-size: 0.88rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+  max-height: 60vh;
+  overflow-y: auto;
+  padding-right: 10px;
+  margin: 16px 0 20px;
+}
+
+.legal-modal-body h4 {
+  font-size: 0.96rem;
+  color: var(--text-primary);
+  margin: 16px 0 6px;
+  font-weight: 700;
+}
+
+.legal-modal-body h4:first-child {
+  margin-top: 0;
+}
+
+.legal-modal-body p {
+  margin-bottom: 10px;
+}
+
+.legal-modal-body ul {
+  padding-left: 20px;
+  margin-bottom: 12px;
+}
+
+.legal-modal-body li {
+  margin-bottom: 4px;
+}
+
+.legal-modal-body strong {
+  color: var(--text-primary);
+}
+
+@media (max-width: 860px) {
+  .footer-grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+    text-align: left;
+  }
 }
 
 /* Utility Hidden */

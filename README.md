@@ -24,7 +24,7 @@ Mūsdienīga, ātra un uzticama 3D drukas pasūtījumu un cenas aprēķina platf
    - Populārie modeļi (Benchy, Dummy 13, Honeycomb wall, Austiņu turētājs, Gridfinity, Rugged box, u.c.).
 6. **Pasūtījumu noformēšana:**
    - Piegādes izvēle: Omniva / DPD pakomāts vai saņemšana uz vietas.
-   - Visi pasūtījuma dati un konfigurācija tiek nosūtīti uz e-pastu: **autosargs@gmail.com**.
+   - Visi pasūtījuma dati un konfigurācija tiek apstrādāti SIA "DL konstrukcijas" (e-pasts: **serviss@dlkonstrukcijas.lv**).
 
 ---
 
